@@ -3,7 +3,3 @@ os: linux
 files:
   - source: ./
     destination: /home/ec2-user/capen
-hooks:
-  AfterInstall:
-    - location: /home/ec2-user/capen/frontend/scripts/run_prod.sh
-      timeout: 360
