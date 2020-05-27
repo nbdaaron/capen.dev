@@ -5,5 +5,5 @@ files:
     destination: /home/ec2-user/capen
 hooks:
   AfterInstall:
-    - location: frontend/scripts/run_prod.sh
+    location: frontend/scripts/run_prod.sh
     timeout: 360
