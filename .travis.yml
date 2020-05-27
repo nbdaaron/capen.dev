@@ -4,6 +4,7 @@ node_js:
 script:
   - bash run_tests.sh
 before_deploy:
+  - rm -rf frontend/node_modules
   - zip -r latest *
   - mkdir -p dpl_cd_upload
   - mv latest.zip dpl_cd_upload/latest.zip
