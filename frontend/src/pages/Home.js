@@ -4,7 +4,7 @@ class Home extends React.Component {
   render() {
     return (
       <main>
-        <h1>capen.dev</h1>
+        <h1>capen.dev - coming soon</h1>
       </main>
     );
   }
