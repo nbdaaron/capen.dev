@@ -1,19 +1,29 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
 import Home from './pages/Home';
+import Teaser from './pages/Teaser';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route
+} from 'react-router-dom';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <Home />
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Currently a work-in-progress. Please check back later for updates!
-        </p>
-      </header>
-    </div>
+    <Router>
+      <div className="App">
+        <header className="App-header">
+          <Switch>
+            <Route path="/home">
+              <Home />
+            </Route>
+            <Route path="/">
+              <Teaser />
+            </Route>
+          </Switch>
+        </header>
+      </div>
+    </Router>
   );
 }
 
