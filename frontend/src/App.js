@@ -10,9 +10,6 @@ function App() {
         <Home />
         <img src={logo} className="App-logo" alt="logo" />
         <p>
-          Play multiplayer games online with your friends!
-        </p>
-        <p>
           Currently a work-in-progress. Please check back later for updates!
         </p>
       </header>
