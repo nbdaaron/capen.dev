@@ -4,12 +4,12 @@ const socket = openSocket('http://localhost:8000/');
 
 const SEND_OPS = {
   // Account Registration
-  REGISTER_ACCOUNT: 'REGISTER_ACCOUNT'
+  REGISTER_ACCOUNT: 'REGISTER_ACCOUNT',
 };
 
 const RECV_OPS = {
   // Account Registration
-  REGISTER_RESPONSE: 'REGISTER_RESPONSE'
+  REGISTER_RESPONSE: 'REGISTER_RESPONSE',
 };
 
 const sendMessage = (msg, payload) => {
@@ -17,23 +17,23 @@ const sendMessage = (msg, payload) => {
 };
 
 const addListener = (msg, callback) => {
-  return socket.on(msg, (response) => callback(response));
+  return socket.on(msg, response => callback(response));
 };
 
 const removeListener = (msg, listener) => {
   socket.off(msg, listener);
 };
 
-const sendAndListen = (send_op, payload, recv_op, timeout=5000) => {
-  sendMessage(send_op, payload);
+const sendAndListen = (sendOp, payload, recvOp, timeout = 5000) => {
+  sendMessage(sendOp, payload);
 
   return new Promise((resolve, reject) => {
-    const listener = addListener(recv_op, (response) => {
-      removeListener(recv_op, listener);
+    const listener = addListener(recvOp, response => {
+      removeListener(recvOp, listener);
       resolve(response);
     });
     window.setTimeout(() => {
-      removeListener(recv_op, listener);
+      removeListener(recvOp, listener);
       reject(TIMEOUT_ERROR);
     }, 5000);
   });

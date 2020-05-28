@@ -3,7 +3,6 @@ import { registerAccount } from '../util/server';
 import Loader from '../util/Loader';
 
 class MainRegistrationForm extends React.Component {
-
   constructor(props) {
     super(props);
     this.state = {
@@ -12,7 +11,7 @@ class MainRegistrationForm extends React.Component {
       confirm: '',
       email: '',
       error: '',
-      loading: false
+      loading: false,
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -22,7 +21,7 @@ class MainRegistrationForm extends React.Component {
   }
 
   handleChange(event) {
-    this.setState({[event.target.name]: event.target.value});
+    this.setState({ [event.target.name]: event.target.value });
   }
 
   handleSubmit(event) {
@@ -36,28 +35,28 @@ class MainRegistrationForm extends React.Component {
 
     if (password !== confirm) {
       this.setState({
-        error: 'Your passwords must match!'
+        error: 'Your passwords must match!',
       });
       return;
     }
 
     if (username.length < 5) {
       this.setState({
-        error: 'Your username must be atleast 5 characters'
+        error: 'Your username must be atleast 5 characters',
       });
       return;
     }
 
     if (password.length < 5) {
       this.setState({
-        error: 'Your password must be atleast 5 characters'
+        error: 'Your password must be atleast 5 characters',
       });
       return;
     }
 
     this.setState({
       error: '',
-      loading: true
+      loading: true,
     });
 
     registerAccount(username, password, email)
@@ -67,7 +66,7 @@ class MainRegistrationForm extends React.Component {
 
   handleRegisterResponse(response) {
     this.setState({
-      loading: false
+      loading: false,
     });
     console.log(response);
   }
@@ -75,34 +74,62 @@ class MainRegistrationForm extends React.Component {
   handleRegisterError(error) {
     this.setState({
       error: error.message,
-      loading: false
+      loading: false,
     });
   }
 
   render() {
     return (
       <form onSubmit={this.handleSubmit}>
-        {this.state.error && (
-          <small class="text-danger">
-            {this.state.error}
-          </small>
-        )}
+        {this.state.error && <small class="text-danger">{this.state.error}</small>}
         <Loader loading={this.state.loading} />
         <div className="form-group row">
           <label htmlFor="username">Username</label>
-          <input className="form-control" type="text" name="username" id="username" value={this.state.username} onChange={this.handleChange} required></input>
+          <input
+            className="form-control"
+            type="text"
+            name="username"
+            id="username"
+            value={this.state.username}
+            onChange={this.handleChange}
+            required
+          ></input>
         </div>
         <div className="form-group row">
           <label htmlFor="password">Password</label>
-          <input className="form-control" type="password" name="password" id="password" value={this.state.password} onChange={this.handleChange} required></input>
+          <input
+            className="form-control"
+            type="password"
+            name="password"
+            id="password"
+            value={this.state.password}
+            onChange={this.handleChange}
+            required
+          ></input>
         </div>
         <div className="form-group row">
           <label htmlFor="confirm">Confirm Password</label>
-          <input className="form-control" type="password" name="confirm" id="confirm" value={this.state.confirm} onChange={this.handleChange} required></input>
+          <input
+            className="form-control"
+            type="password"
+            name="confirm"
+            id="confirm"
+            value={this.state.confirm}
+            onChange={this.handleChange}
+            required
+          ></input>
         </div>
         <div className="form-group row">
           <label htmlFor="email">E-mail Address</label>
-          <input className="form-control" type="email" name="email" id="email" value={this.state.email} onChange={this.handleChange} required></input>
+          <input
+            className="form-control"
+            type="email"
+            name="email"
+            id="email"
+            value={this.state.email}
+            onChange={this.handleChange}
+            required
+          ></input>
           <small id="emailHelp" className="form-text text-muted">
             We use your e-mail ONLY to reset your password if you forget it.
           </small>
