@@ -83,7 +83,7 @@ class MainRegistrationForm extends React.Component {
   render() {
     return (
       <form onSubmit={this.handleSubmit}>
-        {this.state.error && <small class="text-danger">{this.state.error}</small>}
+        {this.state.error && <small className="text-danger">{this.state.error}</small>}
         {this.state.complete && <Redirect to="/registerComplete" />}
         <Loader loading={this.state.loading} />
         <div className="form-group row">
@@ -138,7 +138,12 @@ class MainRegistrationForm extends React.Component {
           </small>
         </div>
         <div className="form-group">
-          <input type="submit" className="btn btn-dark mr-3" value="Create Account" />
+          <input
+            type="submit"
+            data-testid="submit"
+            className="btn btn-dark mr-3"
+            value="Create Account"
+          />
         </div>
       </form>
     );
