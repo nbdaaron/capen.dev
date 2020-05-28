@@ -1,6 +1,6 @@
 import React from 'react';
 import { Router } from 'react-router-dom';
-import { createMemoryHistory } from 'history'
+import { createMemoryHistory } from 'history';
 
 /**
  * Wraps components in a React Router.
@@ -9,14 +9,14 @@ import { createMemoryHistory } from 'history'
  * the Router should currently be set to.
  */
 export const wrapRouter = (Component, currentRoute) => {
-	const history = createMemoryHistory();
-	history.push(currentRoute);
-	return (
-	  <Router history={history}>
-	    <Component />
-	  </Router>
-	);
-}
+  const history = createMemoryHistory();
+  history.push(currentRoute);
+  return (
+    <Router history={history}>
+      <Component />
+    </Router>
+  );
+};
 
 /**
  * Accepts a router (usually from wrapRouter) and
@@ -24,4 +24,4 @@ export const wrapRouter = (Component, currentRoute) => {
  * Useful for testing Link elements and other elements
  * that manipulate the current page.
  */
-export const getCurrentRoute = (router) => router.props.history.location.pathname;
+export const getCurrentRoute = router => router.props.history.location.pathname;

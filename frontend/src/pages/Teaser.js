@@ -7,9 +7,7 @@ class Teaser extends React.Component {
       <main>
         <h1>capen.dev - coming soon</h1>
         <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Currently a work-in-progress. Please check back later for updates!
-        </p>
+        <p>Currently a work-in-progress. Please check back later for updates!</p>
       </main>
     );
   }

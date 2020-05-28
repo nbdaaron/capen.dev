@@ -19,7 +19,9 @@ class MainRegistrationForm extends React.Component {
         <div className="form-group row">
           <label htmlFor="email">E-mail Address</label>
           <input className="form-control" type="text" id="email" required></input>
-          <small id="emailHelp" className="form-text text-muted">We use your e-mail ONLY to reset your password if you forget it.</small>
+          <small id="emailHelp" className="form-text text-muted">
+            We use your e-mail ONLY to reset your password if you forget it.
+          </small>
         </div>
         <div className="form-group">
           <button className="btn btn-dark mr-3">Create Account</button>

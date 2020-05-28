@@ -5,14 +5,12 @@ class Home extends React.Component {
   render() {
     // Login condition
     if (true) {
-      return <Redirect to="/login" />
+      return <Redirect to="/login" />;
     }
     return (
       <main>
         <h1>capen.dev</h1>
-        <p>
-          Sample Homepage
-        </p>
+        <p>Sample Homepage</p>
       </main>
     );
   }

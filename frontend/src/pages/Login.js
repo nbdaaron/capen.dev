@@ -6,9 +6,7 @@ class Login extends React.Component {
     return (
       <main>
         <h1>capen.dev</h1>
-        <p>
-          Play multiplayer games online with your friends!
-        </p>
+        <p>Play multiplayer games online with your friends!</p>
         <MainLoginForm />
       </main>
     );
