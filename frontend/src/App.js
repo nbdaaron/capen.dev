@@ -4,7 +4,6 @@ import Home from './pages/Home';
 import Register from './pages/Register';
 import Teaser from './pages/Teaser';
 import {
-  BrowserRouter as Router,
   Switch,
   Route
 } from 'react-router-dom';
