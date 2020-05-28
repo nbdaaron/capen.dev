@@ -1,3 +1,6 @@
+# Abort on any error
+set -e
+
 # Test frontend code
 cd frontend
 npm test

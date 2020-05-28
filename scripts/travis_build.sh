@@ -1,3 +1,6 @@
+# Abort on any error
+set -e
+
 # Build Frontend Code
 cd frontend
 npm run build
