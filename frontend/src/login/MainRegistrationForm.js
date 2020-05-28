@@ -1,6 +1,7 @@
 import React from 'react';
 import { registerAccount } from '../util/server';
 import Loader from '../util/Loader';
+import { Redirect } from 'react-router-dom';
 
 class MainRegistrationForm extends React.Component {
   constructor(props) {
@@ -12,11 +13,12 @@ class MainRegistrationForm extends React.Component {
       email: '',
       error: '',
       loading: false,
+      complete: false,
     };
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleRegisterResponse = this.handleRegisterResponse.bind(this);
+    this.handleRegisterSuccess = this.handleRegisterSuccess.bind(this);
     this.handleRegisterError = this.handleRegisterError.bind(this);
   }
 
@@ -60,20 +62,20 @@ class MainRegistrationForm extends React.Component {
     });
 
     registerAccount(username, password, email)
-      .then(this.handleRegisterResponse)
+      .then(this.handleRegisterSuccess)
       .catch(this.handleRegisterError);
   }
 
-  handleRegisterResponse(response) {
+  handleRegisterSuccess(response) {
     this.setState({
+      complete: true,
       loading: false,
     });
-    console.log(response);
   }
 
-  handleRegisterError(error) {
+  handleRegisterError(response) {
     this.setState({
-      error: error.message,
+      error: response.error,
       loading: false,
     });
   }
@@ -82,6 +84,7 @@ class MainRegistrationForm extends React.Component {
     return (
       <form onSubmit={this.handleSubmit}>
         {this.state.error && <small class="text-danger">{this.state.error}</small>}
+        {this.state.complete && <Redirect to="/registerComplete" />}
         <Loader loading={this.state.loading} />
         <div className="form-group row">
           <label htmlFor="username">Username</label>

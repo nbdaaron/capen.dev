@@ -1,6 +1,8 @@
 import openSocket from 'socket.io-client';
 import { TIMEOUT_ERROR } from './error';
-const socket = openSocket('http://localhost:8000/');
+const socket = openSocket('http://localhost:8000/', {
+  transports: ['websocket', 'polling'],
+});
 
 const SEND_OPS = {
   // Account Registration
@@ -24,18 +26,40 @@ const removeListener = (msg, listener) => {
   socket.off(msg, listener);
 };
 
-const sendAndListen = (sendOp, payload, recvOp, timeout = 5000) => {
+const isSuccessResponse = response => response.success;
+
+/**
+ * Sends a packet to the server with the provided sendOp/payload.
+ * Open the corresponding packet handler in the backend codebase
+ * to see what kind of payload is expected.
+ *
+ * After the packet is sent, it listens for a response with the
+ * corresponding recvOp as the header.
+ *
+ * This function returns a promise that does one of the following:
+ *   1. If a successful response is received, the promise resolves
+ *      with the response payload.
+ *   2. If a failure response is received, the promise rejects
+ *      with the error message.
+ *   3. If the timeout elapses first (10 seconds by default), the promise
+ *      rejects with a generic timeout error (see ./error.js)
+ */
+const sendAndListen = (sendOp, payload, recvOp, timeout = 10000) => {
   sendMessage(sendOp, payload);
 
   return new Promise((resolve, reject) => {
     const listener = addListener(recvOp, response => {
       removeListener(recvOp, listener);
-      resolve(response);
+      if (isSuccessResponse(response)) {
+        resolve(response);
+        return;
+      }
+      reject(response);
     });
     window.setTimeout(() => {
       removeListener(recvOp, listener);
       reject(TIMEOUT_ERROR);
-    }, 5000);
+    }, timeout);
   });
 };
 

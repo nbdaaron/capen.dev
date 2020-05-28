@@ -3,6 +3,7 @@ import './App.css';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import RegisterComplete from './pages/RegisterComplete';
 import Teaser from './pages/Teaser';
 import { Switch, Route } from 'react-router-dom';
 
@@ -19,6 +20,9 @@ function App() {
           </Route>
           <Route path="/register">
             <Register />
+          </Route>
+          <Route path="/registerComplete">
+            <RegisterComplete />
           </Route>
           <Route path="/">
             <Teaser />
