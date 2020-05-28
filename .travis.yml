@@ -7,7 +7,6 @@ install:
   - bash scripts/travis_install.sh
 script:
   - bash scripts/travis_test.sh
-before_deploy:
   - bash scripts/travis_build.sh
 deploy:
 - provider: s3
