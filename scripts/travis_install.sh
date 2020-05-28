@@ -1,4 +1,4 @@
-# Install frontend code
+# Install Frontend Dependencies
 cd frontend
 npm ci
 
