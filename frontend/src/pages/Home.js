@@ -1,15 +1,18 @@
 import React from 'react';
-import MainLoginForm from '../login/MainLoginForm';
+import { Redirect } from 'react-router-dom';
 
 class Home extends React.Component {
   render() {
+    // Login condition
+    if (true) {
+      return <Redirect to="/login" />
+    }
     return (
       <main>
         <h1>capen.dev</h1>
         <p>
-          Play multiplayer games online with your friends!
+          Sample Homepage
         </p>
-        <MainLoginForm />
       </main>
     );
   }
