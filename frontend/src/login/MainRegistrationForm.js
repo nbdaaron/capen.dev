@@ -84,7 +84,7 @@ class MainRegistrationForm extends React.Component {
     return (
       <form onSubmit={this.handleSubmit}>
         {this.state.error && <small className="text-danger">{this.state.error}</small>}
-        {this.state.complete && <Redirect to="/registerComplete" />}
+        {this.state.complete && <Redirect to="/registerComplete" push />}
         <Loader loading={this.state.loading} />
         <div className="form-group row">
           <label htmlFor="username">Username</label>

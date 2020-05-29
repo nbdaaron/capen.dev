@@ -11,11 +11,13 @@ const socket = openSocket(host, {
 const SEND_OPS = {
   // Account Registration
   REGISTER_ACCOUNT: 'REGISTER_ACCOUNT',
+  TRY_LOGIN: 'TRY_LOGIN',
 };
 
 const RECV_OPS = {
   // Account Registration
   REGISTER_RESPONSE: 'REGISTER_RESPONSE',
+  LOGIN_RESPONSE: 'LOGIN_RESPONSE',
 };
 
 const sendMessage = (msg, payload) => {
@@ -70,4 +72,9 @@ const sendAndListen = (sendOp, payload, recvOp, timeout = 10000) => {
 export const registerAccount = (username, password, email) => {
   const payload = { username, password, email };
   return sendAndListen(SEND_OPS.REGISTER_ACCOUNT, payload, RECV_OPS.REGISTER_RESPONSE);
+};
+
+export const tryLogin = (username, password) => {
+  const payload = { username, password };
+  return sendAndListen(SEND_OPS.TRY_LOGIN, payload, RECV_OPS.LOGIN_RESPONSE);
 };
