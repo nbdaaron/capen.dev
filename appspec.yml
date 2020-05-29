@@ -6,4 +6,4 @@ files:
 hooks:
   ApplicationStart:
     - location: scripts/codedeploy_restart_backend.sh
-    timeout: 3600
+      timeout: 3600
