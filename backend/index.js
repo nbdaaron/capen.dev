@@ -1,8 +1,8 @@
 const https = require("https");
 const fs = require("fs");
 
-const key = fs.readFileSync("./key.txt");
-const cert = fs.readFileSync("./cert.txt");
+const key = fs.readFileSync("./ssl_key.txt");
+const cert = fs.readFileSync("./ssl_cert.txt");
 
 const options = {
   key: fs.readFileSync(key),
