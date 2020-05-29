@@ -6,7 +6,8 @@ node_js:
 install:
   - bash scripts/travis_install.sh
 script:
-  - echo "$SSL_CERT_DIRECTORIES" >> backend/config.js
+  - echo "$SSL_KEY" >> backend/ssl_key.txt
+  - echo "$SSL_CERT" >> backend/ssl_cert.txt
   - bash scripts/travis_test.sh
   - bash scripts/travis_build.sh
 deploy:
