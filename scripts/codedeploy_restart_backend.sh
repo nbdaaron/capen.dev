@@ -9,4 +9,4 @@ npm ci
 killall node
 
 # Start backend service
-node index &
+nohup NODE_ENV=production node index > /home/ec2-user/backend_logs.txt &
