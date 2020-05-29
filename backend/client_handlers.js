@@ -1,4 +1,4 @@
-RegisterAccountHandler = require('./handlers/RegisterAccountHandler');
+const RegisterAccountHandler = require("./handlers/RegisterAccountHandler");
 
 const handlers = [RegisterAccountHandler];
 
