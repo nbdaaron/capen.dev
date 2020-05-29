@@ -10,6 +10,7 @@ cd ..
 
 # Remove node_modules from deployment
 rm -rf frontend/node_modules
+rm -rf backend/node_modules
 
 # Package files together to upload to S3
 zip -r latest *
