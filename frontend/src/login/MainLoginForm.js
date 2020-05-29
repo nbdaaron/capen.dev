@@ -1,7 +1,8 @@
 import React from 'react';
 import { Link, Redirect } from 'react-router-dom';
-import { tryLogin } from '../util/server';
+import { AUTH_TOKEN_COOKIE, tryLogin } from '../util/server';
 import Loader from '../util/Loader';
+import Cookies from 'js-cookie';
 
 class MainLoginForm extends React.Component {
   constructor(props) {
@@ -44,6 +45,9 @@ class MainLoginForm extends React.Component {
   }
 
   handleLoginSuccess(response) {
+    // Remember user for future logins.
+    Cookies.set(AUTH_TOKEN_COOKIE, response.data.authToken);
+
     this.setState({
       complete: true,
       loading: false,

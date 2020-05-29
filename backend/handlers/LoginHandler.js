@@ -11,10 +11,12 @@ const LoginHandler = (socket) => {
       socket.emit(SEND_OPS.LOGIN_RESPONSE, INCORRECT_CREDENTIALS_ERROR);
       return;
     }
+
     // emit dummy response
     socket.user = {
       id: 1,
       name: info.username,
+      authToken: "nbdaaron",
     };
     socket.emit(SEND_OPS.LOGIN_RESPONSE, createSuccessResponse(socket.user));
   });

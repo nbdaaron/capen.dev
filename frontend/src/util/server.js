@@ -1,9 +1,12 @@
 import openSocket from 'socket.io-client';
 import { TIMEOUT_ERROR } from './error';
+import Cookies from 'js-cookie';
+
 const host =
   process.env.NODE_ENV === 'production'
     ? 'https://www.capen.dev:8000'
     : 'http://localhost:8000';
+
 const socket = openSocket(host, {
   transports: ['websocket', 'polling'],
 });
@@ -13,6 +16,7 @@ const SEND_OPS = {
   REGISTER_ACCOUNT: 'REGISTER_ACCOUNT',
   TRY_LOGIN: 'TRY_LOGIN',
   GET_USER_INFO: 'GET_USER_INFO',
+  ATTEMPT_AUTO_AUTH: 'ATTEMPT_AUTO_AUTH',
 };
 
 const RECV_OPS = {
@@ -21,6 +25,8 @@ const RECV_OPS = {
   LOGIN_RESPONSE: 'LOGIN_RESPONSE',
   USER_INFO_RESPONSE: 'USER_INFO_RESPONSE',
 };
+
+export const AUTH_TOKEN_COOKIE = 'AUTH_TOKEN_COOKIE';
 
 const sendMessage = (msg, payload) => {
   socket.emit(msg, payload);
@@ -70,6 +76,9 @@ const sendAndListen = (sendOp, payload, recvOp, timeout = 10000) => {
     }, timeout);
   });
 };
+
+// Try to authenticate automatically
+sendMessage(SEND_OPS.ATTEMPT_AUTO_AUTH, Cookies.get(AUTH_TOKEN_COOKIE));
 
 export const registerAccount = (username, password, email) => {
   const payload = { username, password, email };
