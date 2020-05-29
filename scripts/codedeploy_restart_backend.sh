@@ -6,4 +6,4 @@ npm ci
 killall node
 
 # Start backend service
-node index &
+PRIVKEY=$PRIVKEY CERT=$CERT node index &
