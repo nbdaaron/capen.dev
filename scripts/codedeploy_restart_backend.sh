@@ -6,4 +6,4 @@ npm ci
 killall node
 
 # Start backend service
-node index
+node index &

@@ -3,7 +3,7 @@ import { TIMEOUT_ERROR } from './error';
 const host =
   process.env.NODE_ENV === 'production'
     ? 'https://capen.dev:8000'
-    : 'https://localhost:8000/';
+    : 'https://localhost:8000';
 const socket = openSocket(host, {
   transports: ['websocket', 'polling'],
 });
