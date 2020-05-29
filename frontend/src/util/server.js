@@ -12,12 +12,14 @@ const SEND_OPS = {
   // Account Registration
   REGISTER_ACCOUNT: 'REGISTER_ACCOUNT',
   TRY_LOGIN: 'TRY_LOGIN',
+  GET_USER_INFO: 'GET_USER_INFO',
 };
 
 const RECV_OPS = {
   // Account Registration
   REGISTER_RESPONSE: 'REGISTER_RESPONSE',
   LOGIN_RESPONSE: 'LOGIN_RESPONSE',
+  USER_INFO_RESPONSE: 'USER_INFO_RESPONSE',
 };
 
 const sendMessage = (msg, payload) => {
@@ -77,4 +79,8 @@ export const registerAccount = (username, password, email) => {
 export const tryLogin = (username, password) => {
   const payload = { username, password };
   return sendAndListen(SEND_OPS.TRY_LOGIN, payload, RECV_OPS.LOGIN_RESPONSE);
+};
+
+export const getUserInfo = () => {
+  return sendAndListen(SEND_OPS.GET_USER_INFO, {}, RECV_OPS.USER_INFO_RESPONSE);
 };

@@ -12,7 +12,11 @@ const LoginHandler = (socket) => {
       return;
     }
     // emit dummy response
-    socket.emit(SEND_OPS.LOGIN_RESPONSE, createSuccessResponse());
+    socket.user = {
+      id: 1,
+      name: info.username,
+    };
+    socket.emit(SEND_OPS.LOGIN_RESPONSE, createSuccessResponse(socket.user));
   });
 };
 

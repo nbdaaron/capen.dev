@@ -1,10 +1,9 @@
-export const mockSuccessResponse = {
+export const mockSuccessResponse = payload => ({
   success: true,
-};
+  data: payload,
+});
 
-export const mockErrorResponse = msg => {
-  return {
-    success: false,
-    error: msg,
-  };
-};
+export const mockErrorResponse = msg => ({
+  success: false,
+  error: msg,
+});

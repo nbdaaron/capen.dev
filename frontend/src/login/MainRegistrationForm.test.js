@@ -107,7 +107,7 @@ test('should display server side errors', async () => {
 });
 
 test('should redirect on successful form submission', async () => {
-  registerAccount.mockResolvedValue(mockSuccessResponse);
+  registerAccount.mockResolvedValue(mockSuccessResponse());
 
   const router = wrapRouter(MainRegistrationForm, '/register');
   const { getByText, getByLabelText, getByTestId } = render(router);

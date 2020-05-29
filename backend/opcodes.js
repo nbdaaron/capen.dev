@@ -2,12 +2,14 @@ const RECV_OPS = {
   // Account Registration
   REGISTER_ACCOUNT: "REGISTER_ACCOUNT",
   TRY_LOGIN: "TRY_LOGIN",
+  GET_USER_INFO: "GET_USER_INFO",
 };
 
 const SEND_OPS = {
   // Account Registration
   REGISTER_RESPONSE: "REGISTER_RESPONSE",
   LOGIN_RESPONSE: "LOGIN_RESPONSE",
+  USER_INFO_RESPONSE: "USER_INFO_RESPONSE",
 };
 
 module.exports = {

@@ -61,9 +61,9 @@ class MainLoginForm extends React.Component {
     return (
       <form onSubmit={this.handleSubmit}>
         {this.state.error && <small className="text-danger">{this.state.error}</small>}
-        {this.state.complete && <Redirect to="/" push />}
+        {this.state.complete && <Redirect to="/home" push />}
         <Loader loading={this.state.loading} />
-        <div className="form-group row">
+        <div className="form-group row mt-2">
           <label htmlFor="username">Username</label>
           <input
             className="form-control"
