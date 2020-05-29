@@ -6,4 +6,4 @@ cd /home/ec2-user/capen/backend
 killall node
 
 # Start backend service
-/home/ec2-user/.nvm/versions/node/v14.3.0/bin/node index &
+/home/ec2-user/.nvm/versions/node/v14.3.0/bin/node NODE_ENV=production index &

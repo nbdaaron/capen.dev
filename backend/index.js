@@ -1,18 +1,21 @@
 const https = require("https");
 const fs = require("fs");
+var io;
+if (process.env.NODE_ENV === "production") {
+  const options = {
+    key: fs.readFileSync("/etc/letsencrypt/live/capen.dev/privkey.pem"),
+    cert: fs.readFileSync("/etc/letsencrypt/live/capen.dev/cert.pem"),
+  };
 
-const key = fs.readFileSync("./ssl_key.txt");
-const cert = fs.readFileSync("./ssl_cert.txt");
-
-const options = {
-  key: fs.readFileSync(key),
-  cert: fs.readFileSync(cert),
-};
-
-const server = https.createServer(options).listen(8000);
-const io = require("socket.io")(server, {
-  transports: ["websocket", "polling"],
-});
+  const server = https.createServer(options).listen(8000);
+  io = require("socket.io")(server, {
+    transports: ["websocket", "polling"],
+  });
+} else {
+  io = require("socket.io").listen(8000, {
+    transports: ["websocket", "polling"],
+  });
+}
 
 const handlers = require("./client_handlers");
 
