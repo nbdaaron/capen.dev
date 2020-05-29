@@ -1,13 +1,9 @@
 # Install backend dependencies
-cd backend
-npm ci
+cd /home/ec2-user/capen/backend
+/home/ec2-user/.nvm/versions/node/v14.3.0/bin/npm ci
 
 # Kill existing backend service.
 killall node
 
-pwd > /home/ec2-user/PWD.VAL
-echo $PRIVKEY > /home/ec2-user/PRIVKEY.VAL
-echo $CERT > /home/ec2-user/CERT.VAL
-
 # Start backend service
-PRIVKEY=$PRIVKEY CERT=$CERT node index &
+/home/ec2-user/.nvm/versions/node/v14.3.0/bin/node index &

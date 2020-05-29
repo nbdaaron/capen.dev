@@ -1,9 +1,10 @@
 const https = require("https");
 const fs = require("fs");
+const config = require("./config");
 
 const options = {
-  key: fs.readFileSync(process.env.PRIVKEY),
-  cert: fs.readFileSync(process.env.CERT),
+  key: fs.readFileSync(config.key),
+  cert: fs.readFileSync(config.cert),
 };
 
 const server = https.createServer(options).listen(8000);
