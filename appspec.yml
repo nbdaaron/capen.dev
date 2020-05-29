@@ -3,3 +3,7 @@ os: linux
 files:
   - source: ./
     destination: /home/ec2-user/capen
+hooks:
+  ApplicationStart:
+    - location: scripts/codedeploy_restart_backend.sh
+    timeout: 3600
