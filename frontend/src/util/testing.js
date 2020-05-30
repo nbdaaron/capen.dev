@@ -8,12 +8,12 @@ import { createMemoryHistory } from 'history';
  * You can pass the current route to designate what page
  * the Router should currently be set to.
  */
-export const wrapRouter = (Component, currentRoute) => {
+export const wrapRouter = (Component, currentRoute, props) => {
   const history = createMemoryHistory();
   history.push(currentRoute);
   return (
     <Router history={history}>
-      <Component />
+      <Component {...props} />
     </Router>
   );
 };

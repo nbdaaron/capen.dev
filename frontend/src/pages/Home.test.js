@@ -13,17 +13,13 @@ jest.mock('../util/server', () => {
 });
 
 test('redirects to login page on incorrect credentials', async () => {
-  getUserInfo.mockRejectedValue(mockErrorResponse('Incorrect Credentials'));
-
   const router = wrapRouter(Home, '/home');
   render(router);
   await waitFor(() => expect(getCurrentRoute(router)).toEqual('/login'));
 });
 
 test('displays username on successful login', async () => {
-  getUserInfo.mockResolvedValue(mockSuccessResponse({ id: 1, name: 'bob123' }));
-
-  const router = wrapRouter(Home, '/home');
+  const router = wrapRouter(Home, '/home', { user: { id: 1, name: 'bob123' } });
   const { getByText } = render(router);
   await waitFor(() => expect(getByText(/bob123/i)).toBeInTheDocument());
 });
