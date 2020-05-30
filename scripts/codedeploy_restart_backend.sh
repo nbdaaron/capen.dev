@@ -1,9 +1,3 @@
-# Add EC2 npm and node to PATH.
-PATH=$PATH:/home/ec2-user/.nvm/versions/node/v14.3.0/bin
-
-# take ownership of codedeploy resources
-chown -R ec2-user /home/ec2-user/capen/
-
 # Install backend dependencies
 cd /home/ec2-user/capen/backend
 npm ci
