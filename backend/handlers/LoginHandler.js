@@ -1,6 +1,8 @@
 const { createSuccessResponse, createErrorResponse } = require("../response");
 const database = require("../database");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+const config = require("../config");
 
 const INCORRECT_CREDENTIALS_ERROR = createErrorResponse(
   "Login Error: These credentials are incorrect!"
@@ -28,9 +30,14 @@ const LoginHandler = (recvOp, sendOp) => {
                   socket.user = {
                     id: matchedUser.id,
                     name: info.username,
-                    authToken: "nbdaaron",
                   };
-                  socket.emit(sendOp, createSuccessResponse(socket.user));
+                  jwt.sign(socket.user, config.jwtSecret, (err, token) => {
+                    if (err) {
+                      throw err;
+                    }
+                    socket.user.authToken = token;
+                    socket.emit(sendOp, createSuccessResponse(socket.user));
+                  });
                 } else {
                   // Password is incorrect
                   socket.emit(sendOp, INCORRECT_CREDENTIALS_ERROR);
