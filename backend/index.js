@@ -1,9 +1,6 @@
 const https = require("https");
 const fs = require("fs");
-const {
-  AUTHENTICATED_HANDLERS,
-  UNAUTHENTICATED_HANDLERS,
-} = require("./client_handlers");
+const clientHandlers = require("./clientHandlers");
 
 var io;
 if (process.env.NODE_ENV === "production") {
@@ -27,10 +24,7 @@ io.on("connection", (socket) => {
   socket.on("disconnect", () => {
     console.log("Client disconnected: " + socket.id);
   });
-  UNAUTHENTICATED_HANDLERS.forEach((handler) => {
-    handler(socket);
-  });
-  AUTHENTICATED_HANDLERS.forEach((handler) => {
+  clientHandlers.forEach((handler) => {
     handler(socket);
   });
 });

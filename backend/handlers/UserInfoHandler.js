@@ -1,4 +1,3 @@
-const { SEND_OPS, RECV_OPS } = require("../opcodes");
 const { createSuccessResponse } = require("../response");
 
 /**
@@ -7,13 +6,12 @@ const { createSuccessResponse } = require("../response");
  *       - (socket.user) will be null
  *   2. Return authenticated user profile information to display.
  */
-const UserInfoHandler = (socket) => {
-  socket.on(RECV_OPS.GET_USER_INFO, function (info) {
-    socket.emit(
-      SEND_OPS.USER_INFO_RESPONSE,
-      createSuccessResponse(socket.user || {})
-    );
-  });
+const UserInfoHandler = (recvOp, sendOp) => {
+  return (socket) => {
+    socket.on(recvOp, function (info) {
+      socket.emit(sendOp, createSuccessResponse(socket.user || {}));
+    });
+  };
 };
 
 module.exports = UserInfoHandler;
