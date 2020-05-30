@@ -17,6 +17,7 @@ const SEND_OPS = {
   TRY_LOGIN: 'TRY_LOGIN',
   GET_USER_INFO: 'GET_USER_INFO',
   ATTEMPT_AUTO_AUTH: 'ATTEMPT_AUTO_AUTH',
+  LOGOUT: 'LOGOUT',
 };
 
 const RECV_OPS = {
@@ -88,6 +89,10 @@ export const registerAccount = (username, password, email) => {
 export const tryLogin = (username, password) => {
   const payload = { username, password };
   return sendAndListen(SEND_OPS.TRY_LOGIN, payload, RECV_OPS.LOGIN_RESPONSE);
+};
+
+export const logout = () => {
+  return sendMessage(SEND_OPS.LOGOUT);
 };
 
 export const getUserInfo = () => {
