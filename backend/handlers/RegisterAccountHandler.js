@@ -39,8 +39,9 @@ const RegisterAccountHandler = (socket) => {
                 createErrorResponse(error.sqlMessage)
               );
             }
+          } else {
+            socket.emit(SEND_OPS.REGISTER_RESPONSE, createSuccessResponse());
           }
-          socket.emit(SEND_OPS.REGISTER_RESPONSE, createSuccessResponse());
         }
       );
     });
