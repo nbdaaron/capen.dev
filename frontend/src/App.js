@@ -33,12 +33,18 @@ class App extends React.Component {
       user: {},
       error: null,
     };
+
+    this.updateUser = this.updateUser.bind(this);
   }
 
-  componentDidMount() {
+  updateUser() {
     getUserInfo()
       .then(response => this.setState({ loading: false, user: response.data }))
       .catch(response => this.setState({ loading: false, error: response.error }));
+  }
+
+  componentDidMount() {
+    this.updateUser();
   }
 
   render() {
@@ -58,7 +64,11 @@ class App extends React.Component {
           <Switch>
             {routes.map(([Component, path]) => (
               <Route exact path={path} key={path}>
-                <Component user={this.state.user} error={this.state.error} />
+                <Component
+                  user={this.state.user}
+                  error={this.state.error}
+                  updateUser={this.updateUser}
+                />
               </Route>
             ))}
             <Route>

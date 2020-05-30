@@ -48,6 +48,8 @@ class MainLoginForm extends React.Component {
     // Remember user for future logins.
     Cookies.set(AUTH_TOKEN_COOKIE, response.data.authToken);
 
+    this.props.updateUser();
+
     this.setState({
       complete: true,
       loading: false,
