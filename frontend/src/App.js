@@ -31,13 +31,14 @@ class App extends React.Component {
     this.state = {
       loading: true,
       user: {},
+      error: null,
     };
   }
 
   componentDidMount() {
     getUserInfo()
       .then(response => this.setState({ loading: false, user: response.data }))
-      .catch(err => this.setState({ loading: false }));
+      .catch(response => this.setState({ loading: false, error: response.error }));
   }
 
   render() {
@@ -57,7 +58,7 @@ class App extends React.Component {
           <Switch>
             {routes.map(([Component, path]) => (
               <Route exact path={path} key={path}>
-                <Component user={this.state.user} />
+                <Component user={this.state.user} error={this.state.error} />
               </Route>
             ))}
             <Route>
