@@ -3,7 +3,7 @@ const database = require("../database");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const config = require("../config");
-const User = require("../model/User");
+const User = require("../model/user");
 
 // RECV_OPS
 const TRY_LOGIN = "TRY_LOGIN";
