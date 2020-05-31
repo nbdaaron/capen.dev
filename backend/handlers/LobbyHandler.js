@@ -5,7 +5,7 @@ const {
   leaveLobby,
 } = require("../games/lobbies");
 const { SuccessResponse } = require("../model/response");
-const Message = require("../model/Message");
+const Message = require("../model/message");
 const { authenticatedOnly } = require("./util");
 
 // RECV_OPS
