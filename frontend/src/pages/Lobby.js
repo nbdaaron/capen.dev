@@ -20,7 +20,7 @@ class Lobby extends React.Component {
             <p key={user.id}>{user.name}</p>
           ))}
           <Link to="/home">
-            <button>Return Home</button>
+            <button className="btn btn-dark">Return Home</button>
           </Link>
         </div>
       </main>
