@@ -34,7 +34,7 @@ class CreateLobbyButton extends React.Component {
       );
     }
     return (
-      <Link to={this.state.emptyLobbyRoute}>
+      <Link data-testid="createLobby" to={this.state.emptyLobbyRoute}>
         <button className="btn btn-dark mr-3">Create Lobby</button>
       </Link>
     );

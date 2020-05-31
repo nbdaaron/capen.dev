@@ -108,11 +108,20 @@ class MainLoginForm extends React.Component {
           ></input>
         </div>
         <div className="form-group">
-          <input type="submit" className="btn btn-dark mr-3" value="Login"></input>
+          <input
+            data-testid="login"
+            type="submit"
+            className="btn btn-dark mr-3"
+            value="Login"
+          ></input>
           <Link to="/register" data-testid="register">
             <button className="btn btn-dark mr-3">Register</button>
           </Link>
-          <button onClick={this.handleLoginAsGuest} className="btn btn-dark">
+          <button
+            data-testid="loginGuest"
+            onClick={this.handleLoginAsGuest}
+            className="btn btn-dark"
+          >
             Play as Guest
           </button>
         </div>
