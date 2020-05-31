@@ -2,6 +2,7 @@ import React from 'react';
 import './App.css';
 import Home from './pages/Home';
 import Login from './pages/Login';
+import Lobby from './pages/Lobby';
 import Register from './pages/Register';
 import RegisterComplete from './pages/RegisterComplete';
 import Teaser from './pages/Teaser';
@@ -20,6 +21,7 @@ const UNAUTHENTICATED_REDIRECT = '/login';
 
 const AUTHENTICATED_ROUTES = [
   [Home, '/home'],
+  [Lobby, '/lobby/:id'],
   [Teaser, '/'],
 ];
 
@@ -63,13 +65,19 @@ class App extends React.Component {
         <header className="App-header">
           <Switch>
             {routes.map(([Component, path]) => (
-              <Route exact path={path} key={path}>
-                <Component
-                  user={this.state.user}
-                  error={this.state.error}
-                  updateUser={this.updateUser}
-                />
-              </Route>
+              <Route
+                exact
+                path={path}
+                key={path}
+                render={props => (
+                  <Component
+                    user={this.state.user}
+                    error={this.state.error}
+                    updateUser={this.updateUser}
+                    {...props}
+                  />
+                )}
+              />
             ))}
             <Route>
               <Redirect to={redirect} />

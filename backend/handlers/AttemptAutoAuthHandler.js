@@ -6,8 +6,8 @@ const AttemptAutoAuthHandler = (recvOp, sendOp) => {
     socket.on(recvOp, function (token) {
       jwt.verify(token, config.jwtSecret, (err, decoded) => {
         if (decoded) {
+          decoded.authToken = token;
           socket.user = decoded;
-          socket.authToken = token;
         }
       });
     });
