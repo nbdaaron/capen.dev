@@ -1,7 +1,6 @@
 import React from 'react';
 import { AUTH_TOKEN_COOKIE, logout } from '../util/server';
 import Cookies from 'js-cookie';
-import { Link } from 'react-router-dom';
 
 class LogoutButton extends React.Component {
   constructor(props) {
