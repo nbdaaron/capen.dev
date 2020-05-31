@@ -14,9 +14,18 @@ const socket = openSocket(host, {
 const SEND_OPS = {
   // Account Registration
   REGISTER_ACCOUNT: 'REGISTER_ACCOUNT',
+
+  // Login/Authentication
   TRY_LOGIN: 'TRY_LOGIN',
   GET_USER_INFO: 'GET_USER_INFO',
+
+  // Lobby
   GET_EMPTY_LOBBY_ID: 'GET_EMPTY_LOBBY_ID',
+  JOIN_LOBBY: 'JOIN_LOBBY',
+  LEAVE_LOBBY: 'LEAVE_LOBBY',
+  SEND_LOBBY_CHAT_MESSAGE: 'SEND_LOBBY_CHAT_MESSAGE',
+
+  // SEND_OPS without an expected response
   ATTEMPT_AUTO_AUTH: 'ATTEMPT_AUTO_AUTH',
   LOGOUT: 'LOGOUT',
 };
@@ -24,23 +33,29 @@ const SEND_OPS = {
 const RECV_OPS = {
   // Account Registration
   REGISTER_RESPONSE: 'REGISTER_RESPONSE',
+
+  // Login/Authentication
   LOGIN_RESPONSE: 'LOGIN_RESPONSE',
   USER_INFO_RESPONSE: 'USER_INFO_RESPONSE',
+
+  //Lobby
   EMPTY_LOBBY_ID_RESPONSE: 'EMPTY_LOBBY_ID_RESPONSE',
+  LOBBY_STATE_CHANGE: 'LOBBY_STATE_CHANGE',
+  LOBBY_CHAT_MESSAGE: 'LOBBY_CHAT_MESSAGE',
 };
 
 export const AUTH_TOKEN_COOKIE = 'AUTH_TOKEN_COOKIE';
 
-const sendMessage = (msg, payload) => {
-  socket.emit(msg, payload);
+const sendMessage = (sendOp, payload) => {
+  socket.emit(sendOp, payload);
 };
 
-const addListener = (msg, callback) => {
-  return socket.on(msg, response => callback(response));
+const addListener = (recvOp, callback) => {
+  return socket.on(recvOp, response => callback(response));
 };
 
-const removeListener = (msg, listener) => {
-  socket.off(msg, listener);
+const removeListener = (recvOp, listener) => {
+  socket.off(recvOp, listener);
 };
 
 const isSuccessResponse = response => response.success;
@@ -80,6 +95,19 @@ const sendAndListen = (sendOp, payload, recvOp, timeout = 10000) => {
   });
 };
 
+const sendAndAddListeners = (sendOp, payload, recvOperations) => {
+  sendMessage(sendOp, payload);
+
+  return recvOperations.map(({ recvOp, callback }) => [
+    recvOp,
+    addListener(recvOp, callback),
+  ]);
+};
+
+const removeListeners = listeners => {
+  listeners.forEach(([recvOp, listenerId]) => removeListener(recvOp, listenerId));
+};
+
 // Try to authenticate automatically
 sendMessage(SEND_OPS.ATTEMPT_AUTO_AUTH, Cookies.get(AUTH_TOKEN_COOKIE));
 
@@ -94,7 +122,7 @@ export const tryLogin = (username, password) => {
 };
 
 export const logout = () => {
-  return sendMessage(SEND_OPS.LOGOUT);
+  sendMessage(SEND_OPS.LOGOUT);
 };
 
 export const getUserInfo = () => {
@@ -103,4 +131,21 @@ export const getUserInfo = () => {
 
 export const getEmptyLobbyId = () => {
   return sendAndListen(SEND_OPS.GET_EMPTY_LOBBY_ID, {}, RECV_OPS.EMPTY_LOBBY_ID_RESPONSE);
+};
+
+export const joinLobby = (id, lobbyUpdateCallback, chatUpdateCallback) => {
+  const listeners = sendAndAddListeners(SEND_OPS.JOIN_LOBBY, id, [
+    [RECV_OPS.LOBBY_STATE_CHANGE, lobbyUpdateCallback],
+    [RECV_OPS.LOBBY_CHAT_MESSAGE, chatUpdateCallback],
+  ]);
+  return listeners;
+};
+
+export const leaveLobby = (id, listeners) => {
+  sendMessage(SEND_OPS.LEAVE_LOBBY, id);
+  removeListeners(listeners);
+};
+
+export const sendLobbyChatMessage = msg => {
+  sendMessage(SEND_OPS.SEND_LOBBY_CHAT_MESSAGE, msg);
 };

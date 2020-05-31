@@ -1,13 +1,37 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { joinLobby, leaveLobby, sendLobbyChatMessage } from '../util/server';
+import Chatbox from '../chat/Chatbox';
 
 class Lobby extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      users: [this.props.user],
+      chatMessages: [],
+    };
+    this.updateLobbyState = this.updateLobbyState.bind(this);
+    this.recvLobbyChatMessage = this.recvLobbyChatMessage.bind(this);
+  }
   componentDidMount() {
-    // Begin listeners for lobby info
+    const id = this.props.match.params.id;
+    this.listeners = joinLobby(id, this.updateLobbyState, this.recvLobbyChatMessage);
   }
 
   componentWillUnmount() {
-    // End listeners for lobby info
+    const id = this.props.match.params.id;
+    leaveLobby(id, this.listeners);
+    delete this.listeners;
+  }
+
+  updateLobbyState(newState) {
+    this.setState(newState);
+  }
+
+  recvLobbyChatMessage(newMessage) {
+    this.setState({
+      chatMessages: this.state.chatMessages.concat(newMessage),
+    });
   }
 
   render() {
@@ -19,6 +43,10 @@ class Lobby extends React.Component {
           {[this.props.user].map(user => (
             <p key={user.id}>{user.name}</p>
           ))}
+          <Chatbox
+            messages={this.state.chatMessages}
+            sendMessage={sendLobbyChatMessage}
+          />
           <Link to="/home">
             <button className="btn btn-dark">Return Home</button>
           </Link>
