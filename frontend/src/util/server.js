@@ -17,6 +17,7 @@ const SEND_OPS = {
 
   // Login/Authentication
   TRY_LOGIN: 'TRY_LOGIN',
+  LOGIN_AS_GUEST: 'LOGIN_AS_GUEST',
   GET_USER_INFO: 'GET_USER_INFO',
 
   // Lobby
@@ -120,6 +121,10 @@ export const registerAccount = (username, password, email) => {
 export const tryLogin = (username, password) => {
   const payload = { username, password };
   return sendAndListen(SEND_OPS.TRY_LOGIN, payload, RECV_OPS.LOGIN_RESPONSE);
+};
+
+export const loginAsGuest = () => {
+  return sendAndListen(SEND_OPS.LOGIN_AS_GUEST, null, RECV_OPS.LOGIN_RESPONSE);
 };
 
 export const logout = () => {

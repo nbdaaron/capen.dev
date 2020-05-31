@@ -4,9 +4,11 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const config = require("../config");
 const User = require("../model/user");
+const Guest = require("../model/guest");
 
 // RECV_OPS
 const TRY_LOGIN = "TRY_LOGIN";
+const LOGIN_AS_GUEST = "LOGIN_AS_GUEST";
 
 // SEND_OPS
 const LOGIN_RESPONSE = "LOGIN_RESPONSE";
@@ -50,6 +52,18 @@ const LoginHandler = (socket) => {
         }
       }
     );
+  });
+
+  socket.on(LOGIN_AS_GUEST, function () {
+    socket.user = new Guest();
+    const userJson = socket.user.toJSON();
+    jwt.sign(userJson, config.jwtSecret, (err, token) => {
+      if (err) {
+        throw err;
+      }
+      userJson.authToken = token;
+      socket.emit(LOGIN_RESPONSE, new SuccessResponse(userJson));
+    });
   });
 };
 module.exports = LoginHandler;

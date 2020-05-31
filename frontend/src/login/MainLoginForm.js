@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, Redirect } from 'react-router-dom';
-import { AUTH_TOKEN_COOKIE, tryLogin } from '../util/server';
+import { AUTH_TOKEN_COOKIE, tryLogin, loginAsGuest } from '../util/server';
 import Loader from '../util/Loader';
 import Cookies from 'js-cookie';
 
@@ -17,6 +17,7 @@ class MainLoginForm extends React.Component {
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleLoginAsGuest = this.handleLoginAsGuest.bind(this);
     this.handleLoginSuccess = this.handleLoginSuccess.bind(this);
     this.handleLoginFail = this.handleLoginFail.bind(this);
   }
@@ -42,6 +43,19 @@ class MainLoginForm extends React.Component {
     tryLogin(username, password)
       .then(this.handleLoginSuccess)
       .catch(this.handleLoginFail);
+  }
+
+  handleLoginAsGuest() {
+    if (this.state.loading) {
+      return;
+    }
+
+    this.setState({
+      error: '',
+      loading: true,
+    });
+
+    loginAsGuest().then(this.handleLoginSuccess).catch(this.handleLoginFail);
   }
 
   handleLoginSuccess(response) {
@@ -98,9 +112,9 @@ class MainLoginForm extends React.Component {
           <Link to="/register" data-testid="register">
             <button className="btn btn-dark mr-3">Register</button>
           </Link>
-          <Link to="/">
-            <button className="btn btn-dark">Play as Guest</button>
-          </Link>
+          <button onClick={this.handleLoginAsGuest} className="btn btn-dark">
+            Play as Guest
+          </button>
         </div>
       </form>
     );
