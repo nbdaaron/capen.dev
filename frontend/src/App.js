@@ -52,7 +52,7 @@ class App extends React.Component {
   render() {
     let routes = UNAUTHENTICATED_ROUTES;
     let redirect = UNAUTHENTICATED_REDIRECT;
-    if (this.state.user.id) {
+    if (this.state.user) {
       routes = AUTHENTICATED_ROUTES;
       redirect = AUTHENTICATED_REDIRECT;
     }

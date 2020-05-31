@@ -1,49 +1,56 @@
-const { createSuccessResponse, createErrorResponse } = require("../response");
+const { SuccessResponse, ErrorResponse } = require("../model/response");
 const database = require("../database");
 const bcrypt = require("bcrypt");
 
-const USERNAME_TOO_SHORT_ERROR = createErrorResponse(
+// RECV_OPS
+const REGISTER_ACCOUNT = "REGISTER_ACCOUNT";
+
+// SEND_OPS
+const REGISTER_RESPONSE = "REGISTER_RESPONSE";
+
+const USERNAME_TOO_SHORT_ERROR = new ErrorResponse(
   "Register Account Error: Username must be atleast 5 characters!"
 );
-const PASSWORD_TOO_SHORT_ERROR = createErrorResponse(
+const PASSWORD_TOO_SHORT_ERROR = new ErrorResponse(
   "Register Account Error: Password must be atleast 5 characters!"
 );
-const USERNAME_TAKEN_ERROR = createErrorResponse(
+const USERNAME_TAKEN_ERROR = new ErrorResponse(
   "Register Account Error: This username is already taken."
 );
 
-const RegisterAccountHandler = (recvOp, sendOp) => {
-  return (socket) => {
-    socket.on(recvOp, function (info) {
-      if (typeof info.username !== "string" || info.username.length < 5) {
-        socket.emit(sendOp, USERNAME_TOO_SHORT_ERROR);
-        return;
-      }
-      if (typeof info.password !== "string" || info.password.length < 5) {
-        socket.emit(sendOp, PASSWORD_TOO_SHORT_ERROR);
-        return;
-      }
-      // Hash the password
-      bcrypt.hash(info.password, 10).then((hash) => {
-        info.password = hash;
-        database.query(
-          "INSERT INTO Users SET ?",
-          info,
-          (error, results, fields) => {
-            if (error) {
-              if (error.code === "ER_DUP_ENTRY") {
-                socket.emit(sendOp, USERNAME_TAKEN_ERROR);
-              } else {
-                socket.emit(sendOp, createErrorResponse(error.sqlMessage));
-              }
+const RegisterAccountHandler = (socket) => {
+  socket.on(REGISTER_ACCOUNT, function (info) {
+    if (typeof info.username !== "string" || info.username.length < 5) {
+      socket.emit(REGISTER_RESPONSE, USERNAME_TOO_SHORT_ERROR);
+      return;
+    }
+    if (typeof info.password !== "string" || info.password.length < 5) {
+      socket.emit(REGISTER_RESPONSE, PASSWORD_TOO_SHORT_ERROR);
+      return;
+    }
+    // Hash the password
+    bcrypt.hash(info.password, 10).then((hash) => {
+      info.password = hash;
+      database.query(
+        "INSERT INTO Users SET ?",
+        info,
+        (error, results, fields) => {
+          if (error) {
+            if (error.code === "ER_DUP_ENTRY") {
+              socket.emit(REGISTER_RESPONSE, USERNAME_TAKEN_ERROR);
             } else {
-              socket.emit(sendOp, createSuccessResponse());
+              socket.emit(
+                REGISTER_RESPONSE,
+                new ErrorResponse(error.sqlMessage)
+              );
             }
+          } else {
+            socket.emit(REGISTER_RESPONSE, new SuccessResponse());
           }
-        );
-      });
+        }
+      );
     });
-  };
+  });
 };
 
 module.exports = RegisterAccountHandler;

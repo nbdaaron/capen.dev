@@ -1,4 +1,7 @@
-const { createSuccessResponse } = require("../response");
+const { SuccessResponse } = require("../model/response");
+
+const GET_USER_INFO = "GET_USER_INFO";
+const USER_INFO_RESPONSE = "USER_INFO_RESPONSE";
 
 /**
  * User Info handler serves 2 purposes:
@@ -6,12 +9,10 @@ const { createSuccessResponse } = require("../response");
  *       - (socket.user) will be null
  *   2. Return authenticated user profile information to display.
  */
-const UserInfoHandler = (recvOp, sendOp) => {
-  return (socket) => {
-    socket.on(recvOp, function (info) {
-      socket.emit(sendOp, createSuccessResponse(socket.user || {}));
-    });
-  };
+const UserInfoHandler = (socket) => {
+  socket.on(GET_USER_INFO, function (info) {
+    socket.emit(USER_INFO_RESPONSE, new SuccessResponse(socket.user));
+  });
 };
 
 module.exports = UserInfoHandler;

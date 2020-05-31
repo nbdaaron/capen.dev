@@ -20,11 +20,7 @@ if (process.env.NODE_ENV === "production") {
 }
 
 io.on("connection", (socket) => {
-  console.log("Client connected: " + socket.id);
-  socket.on("disconnect", () => {
-    console.log("Client disconnected: " + socket.id);
-  });
   clientHandlers.forEach((handler) => {
-    handler(socket);
+    handler(socket, io);
   });
 });

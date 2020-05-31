@@ -26,8 +26,8 @@ class Chatbox extends React.Component {
     return (
       <div>
         {this.props.messages.map(msg => (
-          <p>
-            {msg.sender}: {msg.message}
+          <p key={msg.id}>
+            {msg.sender.name}: {msg.message}
           </p>
         ))}
         <input type="text" value={this.state.draftMessage} onChange={this.handleChange} />

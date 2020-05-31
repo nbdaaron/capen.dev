@@ -51,7 +51,8 @@ const sendMessage = (sendOp, payload) => {
 };
 
 const addListener = (recvOp, callback) => {
-  return socket.on(recvOp, response => callback(response));
+  socket.on(recvOp, callback);
+  return callback;
 };
 
 const removeListener = (recvOp, listener) => {
@@ -73,10 +74,10 @@ const isSuccessResponse = response => response.success;
  *      with the response payload.
  *   2. If a failure response is received, the promise rejects
  *      with the error message.
- *   3. If the timeout elapses first (10 seconds by default), the promise
+ *   3. If the timeout elapses first (4 seconds by default), the promise
  *      rejects with a generic timeout error (see ./error.js)
  */
-const sendAndListen = (sendOp, payload, recvOp, timeout = 10000) => {
+const sendAndListen = (sendOp, payload, recvOp, timeout = 4000) => {
   sendMessage(sendOp, payload);
 
   return new Promise((resolve, reject) => {
@@ -98,10 +99,10 @@ const sendAndListen = (sendOp, payload, recvOp, timeout = 10000) => {
 const sendAndAddListeners = (sendOp, payload, recvOperations) => {
   sendMessage(sendOp, payload);
 
-  return recvOperations.map(({ recvOp, callback }) => [
-    recvOp,
-    addListener(recvOp, callback),
-  ]);
+  return recvOperations.map(([recvOp, callback]) => {
+    addListener(recvOp, callback);
+    return [recvOp, callback];
+  });
 };
 
 const removeListeners = listeners => {

@@ -10,7 +10,7 @@ class MainLoginForm extends React.Component {
     this.state = {
       username: '',
       password: '',
-      error: '',
+      error: this.props.error,
       loading: false,
       complete: false,
     };

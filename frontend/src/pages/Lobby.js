@@ -40,7 +40,7 @@ class Lobby extends React.Component {
         <div>
           <h1>capen.dev - Lobby</h1>
           <p>Users in the lobby:</p>
-          {[this.props.user].map(user => (
+          {this.state.users.map(user => (
             <p key={user.id}>{user.name}</p>
           ))}
           <Chatbox
