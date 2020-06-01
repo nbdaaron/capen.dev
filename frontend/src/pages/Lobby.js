@@ -39,16 +39,13 @@ class Lobby extends React.Component {
       <main>
         <div>
           <h1>capen.dev - Lobby</h1>
-          <p>Users in the lobby:</p>
-          {this.state.users.map(user => (
-            <p key={user.id}>{user.name}</p>
-          ))}
+          <p>Users in the lobby: {this.state.users.map(user => user.name).join(', ')}</p>
           <Chatbox
             messages={this.state.chatMessages}
             sendMessage={sendLobbyChatMessage}
           />
           <Link to="/home">
-            <button className="btn btn-dark">Return Home</button>
+            <button className="btn btn-dark mt-3">Return Home</button>
           </Link>
         </div>
       </main>

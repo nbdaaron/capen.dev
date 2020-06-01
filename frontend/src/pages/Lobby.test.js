@@ -33,6 +33,5 @@ test('displays username', async () => {
     match: { params: { id: 123 } },
   };
   const { getByText } = render(wrapRouter(Lobby, '/lobby/123', props));
-  expect(getByText(mockUser(1, 'aaron').name)).toBeInTheDocument();
-  expect(getByText(mockUser(2, 'grace').name)).toBeInTheDocument();
+  expect(getByText(/aaron, grace/i)).toBeInTheDocument();
 });

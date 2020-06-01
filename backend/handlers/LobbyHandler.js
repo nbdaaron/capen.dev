@@ -70,7 +70,7 @@ const LobbyHandler = (socket, io) => {
     authenticatedOnly(socket, function () {
       const lobbyId = socket.user.lobbyId;
       if (lobbyId) {
-        leaveLobby(lobbyId, socket);
+        leaveLobby(lobbyId, socket.user);
         io.to(lobbyId).emit(LOBBY_STATE_CHANGE, getLobby(lobbyId));
         socket.leave(lobbyId);
       }

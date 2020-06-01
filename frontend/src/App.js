@@ -1,5 +1,6 @@
 import React from 'react';
 import './App.css';
+import './chat/Chatbox.css';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Lobby from './pages/Lobby';
@@ -32,16 +33,17 @@ class App extends React.Component {
     super(props);
     this.state = {
       loading: true,
-      user: {},
+      user: null,
       error: null,
+      redirect: null,
     };
 
     this.updateUser = this.updateUser.bind(this);
   }
 
-  updateUser() {
+  updateUser(redirect) {
     getUserInfo()
-      .then(response => this.setState({ loading: false, user: response.data }))
+      .then(response => this.setState({ loading: false, user: response.data, redirect }))
       .catch(response => this.setState({ loading: false, error: response.error }));
   }
 
@@ -59,7 +61,6 @@ class App extends React.Component {
     if (this.state.loading) {
       return <Loader loading={this.state.loading} />;
     }
-    // Unauthenticated endpoints
     return (
       <div className="App">
         <header className="App-header">
@@ -79,6 +80,16 @@ class App extends React.Component {
                 )}
               />
             ))}
+            {this.state.redirect && <Redirect to={this.state.redirect} />}
+            {!this.state.user &&
+              AUTHENTICATED_ROUTES.map(([Component, path]) => (
+                <Redirect
+                  exact
+                  key={`redirect_${path}`}
+                  from={path}
+                  to={`/login/?next=${path}`}
+                />
+              ))}
             <Route>
               <Redirect to={redirect} />
             </Route>

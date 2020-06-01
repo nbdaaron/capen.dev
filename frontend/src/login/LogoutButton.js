@@ -11,7 +11,7 @@ class LogoutButton extends React.Component {
   requestLogout() {
     logout();
     Cookies.remove(AUTH_TOKEN_COOKIE);
-    this.props.updateUser();
+    this.props.updateUser('/login');
   }
 
   render() {

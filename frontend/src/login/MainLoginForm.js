@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link, Redirect } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { AUTH_TOKEN_COOKIE, tryLogin, loginAsGuest } from '../util/server';
 import Loader from '../util/Loader';
 import Cookies from 'js-cookie';
@@ -61,8 +61,9 @@ class MainLoginForm extends React.Component {
   handleLoginSuccess(response) {
     // Remember user for future logins.
     Cookies.set(AUTH_TOKEN_COOKIE, response.data.authToken);
+    const redirect = new URLSearchParams(window.location.search).get('next');
 
-    this.props.updateUser();
+    this.props.updateUser(redirect);
 
     this.setState({
       complete: true,
@@ -81,7 +82,6 @@ class MainLoginForm extends React.Component {
     return (
       <form onSubmit={this.handleSubmit}>
         {this.state.error && <small className="text-danger">{this.state.error}</small>}
-        {this.state.complete && <Redirect to="/home" push />}
         <Loader loading={this.state.loading} />
         <div className="form-group row mt-2">
           <label htmlFor="username">Username</label>

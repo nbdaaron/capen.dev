@@ -1,0 +1,29 @@
+.chatbox {
+  width: 600px;
+}
+
+.chatmessages {
+  height: 200px;
+  overflow-y: scroll;
+  text-align: left;
+  border-top: 1px solid #1c2030;
+  border-left: 1px solid #1c2030;
+  border-right: 1px solid #1c2030;
+}
+
+.chatmessage {
+  margin: 4px 15px;
+}
+
+.chatmessageSender {
+  font-weight: bold;
+}
+
+.chatInputBox {
+  width: 538px;
+  padding: 0px 5px;
+}
+
+.chatSendButton {
+  width: 60px;
+}
