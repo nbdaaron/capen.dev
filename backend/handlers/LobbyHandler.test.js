@@ -26,13 +26,19 @@ test("Should notify all members when someone joins/leaves lobby", () => {
   socket2.mockReceive("JOIN_LOBBY", 12345);
   socket2.mockReceive("LEAVE_LOBBY", 12345);
 
+  const remainingLobbyData = {
+    id: 12345,
+    game: "test",
+    inGame: false,
+  };
+
   const expectedResult = [
-    ["LOBBY_STATE_CHANGE", { id: 12345, users: [bob.toJSON()] }],
+    ["LOBBY_STATE_CHANGE", { users: [bob.toJSON()], ...remainingLobbyData }],
     [
       "LOBBY_STATE_CHANGE",
-      { id: 12345, users: [bob.toJSON(), george.toJSON()] },
+      { users: [bob.toJSON(), george.toJSON()], ...remainingLobbyData },
     ],
-    ["LOBBY_STATE_CHANGE", { id: 12345, users: [bob.toJSON()] }],
+    ["LOBBY_STATE_CHANGE", { users: [bob.toJSON()], ...remainingLobbyData }],
   ];
 
   expect(socket1.getEmittedMessages()).toMatchPackets(expectedResult);
