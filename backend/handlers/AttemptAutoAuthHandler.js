@@ -9,7 +9,6 @@ const AttemptAutoAuthHandler = (socket) => {
   socket.on(ATTEMPT_AUTO_AUTH, function (token) {
     jwt.verify(token, config.jwtSecret, (err, decoded) => {
       if (decoded) {
-        // decoded.authToken = token;
         socket.user = new User(decoded.id, decoded.name);
       }
     });
