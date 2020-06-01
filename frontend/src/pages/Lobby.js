@@ -9,9 +9,12 @@ class Lobby extends React.Component {
     this.state = {
       users: [this.props.user],
       chatMessages: [],
+      success: '',
+      error: '',
     };
     this.updateLobbyState = this.updateLobbyState.bind(this);
     this.recvLobbyChatMessage = this.recvLobbyChatMessage.bind(this);
+    this.copyInviteLink = this.copyInviteLink.bind(this);
   }
   componentDidMount() {
     const id = this.props.match.params.id;
@@ -34,16 +37,32 @@ class Lobby extends React.Component {
     });
   }
 
+  copyInviteLink() {
+    window.navigator.clipboard
+      .writeText(window.location.href)
+      .then(() => this.setState({ success: 'Copied Link to clipboard!', error: '' }))
+      .catch(err => this.setState({ success: '', error: err.message }));
+  }
+
   render() {
     return (
       <main>
         <div>
           <h1>capen.dev - Lobby</h1>
-          <p>Users in the lobby: {this.state.users.map(user => user.name).join(', ')}</p>
+          {this.state.success && (
+            <small className="text-success mb-2">{this.state.success}</small>
+          )}
+          {this.state.error && <small className="text-danger">{this.state.error}</small>}
+          <p className="mt-2">
+            Users in the lobby: {this.state.users.map(user => user.name).join(', ')}
+          </p>
           <Chatbox
             messages={this.state.chatMessages}
             sendMessage={sendLobbyChatMessage}
           />
+          <button className="btn btn-dark mt-3 mr-3" onClick={this.copyInviteLink}>
+            Copy Invite Link
+          </button>
           <Link to="/home">
             <button className="btn btn-dark mt-3">Return Home</button>
           </Link>
