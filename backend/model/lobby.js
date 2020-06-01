@@ -5,10 +5,20 @@ class Lobby {
   constructor(id, creator) {
     this.id = id;
     this.users = [creator];
+    this.game = "test";
+    this.inGame = false;
   }
 
   static generateRandomId() {
     return Math.floor(Math.random() * MAX_LOBBY_ID);
+  }
+
+  setGame(game) {
+    this.game = game;
+  }
+
+  setInGame(val) {
+    this.inGame = val;
   }
 
   getLeader() {

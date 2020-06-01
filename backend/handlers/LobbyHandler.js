@@ -13,6 +13,8 @@ const GET_EMPTY_LOBBY_ID = "GET_EMPTY_LOBBY_ID";
 const JOIN_LOBBY = "JOIN_LOBBY";
 const LEAVE_LOBBY = "LEAVE_LOBBY";
 const SEND_LOBBY_CHAT_MESSAGE = "SEND_LOBBY_CHAT_MESSAGE";
+const SELECT_GAME = "SELECT_GAME";
+const START_GAME = "START_GAME";
 
 // SEND_OPS
 const EMPTY_LOBBY_ID_RESPONSE = "EMPTY_LOBBY_ID_RESPONSE";
@@ -60,6 +62,28 @@ const LobbyHandler = (socket, io) => {
           LOBBY_CHAT_MESSAGE,
           new Message(socket.user, message)
         );
+      }
+    })
+  );
+
+  socket.on(
+    SELECT_GAME,
+    authenticatedOnly(socket, function (game) {
+      const lobbyId = socket.user.lobbyId;
+      if (lobbyId) {
+        getLobby(lobbyId).setGame(game);
+        io.to(lobbyId).emit(LOBBY_STATE_CHANGE, getLobby(lobbyId));
+      }
+    })
+  );
+
+  socket.on(
+    START_GAME,
+    authenticatedOnly(socket, function () {
+      const lobbyId = socket.user.lobbyId;
+      if (lobbyId) {
+        getLobby(lobbyId).setInGame(true);
+        io.to(lobbyId).emit(LOBBY_STATE_CHANGE, getLobby(lobbyId));
       }
     })
   );

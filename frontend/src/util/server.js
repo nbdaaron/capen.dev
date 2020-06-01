@@ -25,6 +25,8 @@ const SEND_OPS = {
   JOIN_LOBBY: 'JOIN_LOBBY',
   LEAVE_LOBBY: 'LEAVE_LOBBY',
   SEND_LOBBY_CHAT_MESSAGE: 'SEND_LOBBY_CHAT_MESSAGE',
+  SELECT_GAME: 'SELECT_GAME',
+  START_GAME: 'START_GAME',
 
   // SEND_OPS without an expected response
   ATTEMPT_AUTO_AUTH: 'ATTEMPT_AUTO_AUTH',
@@ -147,6 +149,7 @@ export const joinLobby = (id, lobbyUpdateCallback, chatUpdateCallback) => {
   return listeners;
 };
 
+// TODO - remove id here...
 export const leaveLobby = (id, listeners) => {
   sendMessage(SEND_OPS.LEAVE_LOBBY, id);
   removeListeners(listeners);
@@ -154,4 +157,12 @@ export const leaveLobby = (id, listeners) => {
 
 export const sendLobbyChatMessage = msg => {
   sendMessage(SEND_OPS.SEND_LOBBY_CHAT_MESSAGE, msg);
+};
+
+export const selectGame = game => {
+  sendMessage(SEND_OPS.SELECT_GAME, game);
+};
+
+export const startGame = () => {
+  sendMessage(SEND_OPS.START_GAME);
 };
