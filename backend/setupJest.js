@@ -1,10 +1,16 @@
 const { Anything } = require("./testingUtil");
-const { isEqual } = require("lodash");
+const { isEqualWith } = require("lodash");
 
 const printPackets = (packets) => {
   return packets
     .map(([opcode, message]) => `${opcode}: ${JSON.stringify(message)}`)
     .join(", ");
+};
+
+const anythingCatcher = (a, b) => {
+  if (a === Anything || b === Anything) {
+    return true;
+  }
 };
 
 expect.extend({
@@ -35,7 +41,7 @@ expect.extend({
             )} !== ${printPackets(packets)}`,
         };
       } else if (
-        !isEqual(receivedMessage, packetMessage) &&
+        !isEqualWith(receivedMessage, packetMessage, anythingCatcher) &&
         receivedMessage !== Anything &&
         packetMessage !== Anything
       ) {

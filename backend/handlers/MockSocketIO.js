@@ -44,7 +44,7 @@ class MockSocket {
   }
 
   emit(sendOp, message) {
-    this.sentMessages.push([sendOp, message]);
+    this.sentMessages.push([sendOp, JSON.parse(JSON.stringify(message))]);
   }
 
   getEmittedMessages() {

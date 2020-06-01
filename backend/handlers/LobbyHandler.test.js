@@ -1,8 +1,6 @@
 const LobbyHandler = require("./LobbyHandler");
 const { MockSocket, MockIO } = require("./MockSocketIO");
 const User = require("../model/user");
-const Lobby = require("../model/lobby");
-const Message = require("../model/message");
 const { Anything } = require("../testingUtil");
 
 test("Should generate empty lobby IDs on request", () => {
@@ -18,8 +16,6 @@ test("Should notify all members when someone joins/leaves lobby", () => {
   const bob = new User(1, "Bob");
   const george = new User(2, "George");
 
-  const lobby = new Lobby(12345, bob);
-
   const socket1 = new MockSocket(bob);
   const socket2 = new MockSocket(george);
 
@@ -31,20 +27,18 @@ test("Should notify all members when someone joins/leaves lobby", () => {
   socket2.mockReceive("LEAVE_LOBBY", 12345);
 
   const expectedResult = [
-    ["LOBBY_STATE_CHANGE", lobby],
-    ["LOBBY_STATE_CHANGE", lobby],
-    ["LOBBY_STATE_CHANGE", lobby],
+    ["LOBBY_STATE_CHANGE", { id: 12345, users: [bob.toJSON()] }],
+    [
+      "LOBBY_STATE_CHANGE",
+      { id: 12345, users: [bob.toJSON(), george.toJSON()] },
+    ],
+    ["LOBBY_STATE_CHANGE", { id: 12345, users: [bob.toJSON()] }],
   ];
 
   expect(socket1.getEmittedMessages()).toMatchPackets(expectedResult);
 });
 
 test("Should broadcast chat messages", () => {
-  // Keep message IDs the same
-  const mockMath = Object.create(global.Math);
-  mockMath.random = () => 0.5;
-  global.Math = mockMath;
-
   const bob = new User(1, "Bob");
   const george = new User(2, "George");
 
@@ -59,6 +53,9 @@ test("Should broadcast chat messages", () => {
   socket2.mockReceive("SEND_LOBBY_CHAT_MESSAGE", "HELLOOO");
 
   expect(socket1.getEmittedMessages().splice(2)).toMatchPackets([
-    ["LOBBY_CHAT_MESSAGE", new Message(george, "HELLOOO")],
+    [
+      "LOBBY_CHAT_MESSAGE",
+      { sender: george.toJSON(), message: "HELLOOO", id: Anything },
+    ],
   ]);
 });
