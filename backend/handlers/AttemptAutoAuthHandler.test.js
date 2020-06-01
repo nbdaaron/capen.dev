@@ -1,5 +1,5 @@
 const AttemptAutoAuthHandler = require("./AttemptAutoAuthHandler");
-const { MockSocket } = require("./MockSocketIO");
+const { MockSocket } = require("../mock/MockSocketIO");
 const User = require("../model/user");
 const jwt = require("jsonwebtoken");
 

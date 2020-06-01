@@ -16,6 +16,7 @@
   "rules": {
     "semi": [0, "never"],
     "new-cap": 0,
-    "handle-callback-err": 0
+    "handle-callback-err": 0,
+    "standard/no-callback-literal": 0
   }
 }

@@ -1,5 +1,5 @@
 const LobbyHandler = require("./LobbyHandler");
-const { MockSocket, MockIO } = require("./MockSocketIO");
+const { MockSocket, MockIO } = require("../mock/MockSocketIO");
 const User = require("../model/user");
 const { Anything } = require("../testingUtil");
 
