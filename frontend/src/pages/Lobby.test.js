@@ -13,7 +13,7 @@ jest.mock('../util/server', () => {
   };
 });
 
-test('displays username', () => {
+test('displays title', () => {
   const props = {
     user: mockUser(),
     match: { params: { id: 123 } },
@@ -22,7 +22,7 @@ test('displays username', () => {
   expect(getByText(/Users in the lobby/i)).toBeInTheDocument();
 });
 
-test('displays username', async () => {
+test('displays users in the lobby', async () => {
   joinLobby.mockImplementation((id, lobbyStateCallback, lobbyChatCallback) => {
     lobbyStateCallback({
       users: [mockUser(1, 'aaron'), mockUser(2, 'grace')],

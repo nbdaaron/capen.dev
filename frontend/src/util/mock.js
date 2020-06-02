@@ -1,3 +1,5 @@
+import React from 'react';
+
 export const mockSuccessResponse = payload => ({
   success: true,
   data: payload,
@@ -14,3 +16,9 @@ export const mockUser = (id = 1, name = 'aaron123') => {
     name: name,
   };
 };
+
+export class MockFakeElement extends React.Component {
+  render() {
+    return <p>Mock Fake Element</p>;
+  }
+}
