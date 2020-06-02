@@ -3,9 +3,9 @@ const Lobby = require("../model/lobby");
 // Lobbies are stored in memory
 const lobbies = {};
 
-// SEND_OPS
-const DECLARE_WINNER = "DECLARE_WINNER";
-const LOBBY_STATE_CHANGE = "LOBBY_STATE_CHANGE";
+const GAME_LAUNCHERS = {
+  bomb: require("./bombGame").startGame,
+};
 
 const getLobby = (id) => lobbies[id];
 const getEmptyLobbyId = () => {
@@ -43,14 +43,15 @@ const leaveLobby = (lobbyId, user) => {
   }
 };
 
-const finishGame = (io, lobbyId, winner) => {
+const startGame = (io, lobbyId) => {
   if (!lobbies[lobbyId]) {
     return;
   }
-  lobbies[lobbyId].setInGame(false);
-  io.to(lobbyId).emit(DECLARE_WINNER, winner);
-
-  io.to(lobbyId).emit(LOBBY_STATE_CHANGE, getLobby(lobbyId));
+  const lobby = lobbies[lobbyId];
+  lobby.setInGame(true);
+  if (GAME_LAUNCHERS[lobby.getGame()]) {
+    GAME_LAUNCHERS[lobby.getGame()](io, lobby);
+  }
 };
 
 module.exports = {
@@ -58,5 +59,5 @@ module.exports = {
   getLobby: getLobby,
   joinLobby: joinLobby,
   leaveLobby: leaveLobby,
-  finishGame: finishGame,
+  startGame: startGame,
 };

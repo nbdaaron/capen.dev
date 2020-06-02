@@ -12,6 +12,9 @@ const socket = openSocket(host, {
 });
 
 export const SEND_OPS = {
+  // Latency check
+  PING: 'PING',
+
   // Account Registration
   REGISTER_ACCOUNT: 'REGISTER_ACCOUNT',
 
@@ -31,12 +34,20 @@ export const SEND_OPS = {
   // Test Game
   TEST_GAME_CLICK_BUTTON: 'TEST_GAME_CLICK_BUTTON',
 
+  // Bomb Game
+  BOMB_GAME_UPDATE_PLAYER: 'BOMB_GAME_UPDATE_PLAYER',
+  BOMB_GAME_PLANT_BOMB: 'BOMB_GAME_PLANT_BOMB',
+  BOMB_GAME_LOOT_POWERUP: 'BOMB_GAME_LOOT_POWERUP',
+
   // SEND_OPS without an expected response
   ATTEMPT_AUTO_AUTH: 'ATTEMPT_AUTO_AUTH',
   LOGOUT: 'LOGOUT',
 };
 
 export const RECV_OPS = {
+  // Latency check
+  PONG: 'PONG',
+
   // Account Registration
   REGISTER_RESPONSE: 'REGISTER_RESPONSE',
 
@@ -49,6 +60,9 @@ export const RECV_OPS = {
   LOBBY_STATE_CHANGE: 'LOBBY_STATE_CHANGE',
   LOBBY_CHAT_MESSAGE: 'LOBBY_CHAT_MESSAGE',
   DECLARE_WINNER: 'DECLARE_WINNER',
+
+  // Bomb Game
+  BOMB_GAME_UPDATE_BOARD: 'BOMB_GAME_UPDATE_BOARD',
 };
 
 export const AUTH_TOKEN_COOKIE = 'AUTH_TOKEN_COOKIE';
@@ -57,12 +71,12 @@ export const sendMessage = (sendOp, payload) => {
   socket.emit(sendOp, payload);
 };
 
-const addListener = (recvOp, callback) => {
+export const addListener = (recvOp, callback) => {
   socket.on(recvOp, callback);
   return callback;
 };
 
-const removeListener = (recvOp, listener) => {
+export const removeListener = (recvOp, listener) => {
   socket.off(recvOp, listener);
 };
 
@@ -103,9 +117,7 @@ export const sendAndListen = (sendOp, payload, recvOp, timeout = 4000) => {
   });
 };
 
-export const sendAndAddListeners = (sendOp, payload, recvOperations) => {
-  sendMessage(sendOp, payload);
-
+export const addListeners = recvOperations => {
   return recvOperations.map(([recvOp, callback]) => {
     addListener(recvOp, callback);
     return [recvOp, callback];
@@ -114,6 +126,40 @@ export const sendAndAddListeners = (sendOp, payload, recvOperations) => {
 
 export const removeListeners = listeners => {
   listeners.forEach(([recvOp, listenerId]) => removeListener(recvOp, listenerId));
+};
+
+export const sendAndAddListeners = (sendOp, payload, recvOperations) => {
+  sendMessage(sendOp, payload);
+  return addListeners(recvOperations);
+};
+
+var approxLatency;
+var ping;
+var ponged = true;
+
+const checkPing = () => {
+  if (!ponged) {
+    return;
+  }
+  ping = Date.now();
+  sendMessage(SEND_OPS.PING);
+  ponged = false;
+};
+
+// Check ping every 5 seconds.
+window.setInterval(checkPing, 5000);
+checkPing();
+
+addListener(RECV_OPS.PONG, () => {
+  ponged = true;
+  // Cap estimated latency at 5 seconds.
+  // If it's worse, your gameplay is going to be
+  // pretty bad regardless...
+  approxLatency = Math.min(5000, Date.now() - ping);
+});
+
+export const getApproxLatency = () => {
+  return approxLatency;
 };
 
 // Try to authenticate automatically initially.

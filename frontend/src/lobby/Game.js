@@ -7,7 +7,7 @@ class Game extends React.Component {
   render() {
     const GameComponent = Games[this.props.game] && Games[this.props.game].component;
     if (GameComponent) {
-      return <GameComponent />;
+      return <GameComponent {...this.props} />;
     } else {
       return (
         <main>

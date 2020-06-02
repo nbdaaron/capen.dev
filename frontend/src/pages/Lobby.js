@@ -61,7 +61,7 @@ class Lobby extends React.Component {
     const { game, chatMessages, users, inGame, winner } = this.state;
 
     if (inGame) {
-      return <Game game={game} />;
+      return <Game game={game} user={user} />;
     } else if (this.state.winner) {
       return <WinnerWindow game={game} winner={winner} return={this.clearWinner} />;
     }

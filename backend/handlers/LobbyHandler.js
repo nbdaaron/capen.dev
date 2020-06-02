@@ -3,6 +3,7 @@ const {
   getLobby,
   joinLobby,
   leaveLobby,
+  startGame,
 } = require("../games/lobbies");
 const { SuccessResponse } = require("../model/response");
 const Message = require("../model/message");
@@ -75,7 +76,7 @@ const LobbyHandler = (socket, io) => {
     START_GAME,
     inLobbyOnly(socket, function () {
       const lobbyId = socket.user.lobbyId;
-      getLobby(lobbyId).setInGame(true);
+      startGame(io, lobbyId);
       io.to(lobbyId).emit(LOBBY_STATE_CHANGE, getLobby(lobbyId));
     })
   );

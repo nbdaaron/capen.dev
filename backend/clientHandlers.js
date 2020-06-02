@@ -1,3 +1,4 @@
+const PingHandler = require("./handlers/PingHandler");
 const RegisterAccountHandler = require("./handlers/RegisterAccountHandler");
 const LoginHandler = require("./handlers/LoginHandler");
 const UserInfoHandler = require("./handlers/UserInfoHandler");
@@ -6,8 +7,10 @@ const AttemptAutoAuthHandler = require("./handlers/AttemptAutoAuthHandler");
 const LogoutHandler = require("./handlers/LogoutHandler");
 
 const TestGameHandler = require("./handlers/TestGameHandler");
+const BombGameHandler = require("./handlers/BombGameHandler");
 
 const handlers = [
+  PingHandler,
   RegisterAccountHandler,
   LoginHandler,
   UserInfoHandler,
@@ -15,6 +18,7 @@ const handlers = [
   AttemptAutoAuthHandler,
   LogoutHandler,
   TestGameHandler,
+  BombGameHandler,
 ];
 
 module.exports = handlers;
