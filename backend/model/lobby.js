@@ -13,8 +13,16 @@ class Lobby {
     return Math.floor(Math.random() * MAX_LOBBY_ID);
   }
 
+  getGame() {
+    return this.game;
+  }
+
   setGame(game) {
     this.game = game;
+  }
+
+  getInGame() {
+    return this.inGame;
   }
 
   setInGame(val) {

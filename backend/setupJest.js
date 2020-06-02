@@ -28,11 +28,7 @@ expect.extend({
       const [receivedOpcode, receivedMessage] = received[i];
       const [packetOpcode, packetMessage] = packets[i];
 
-      if (
-        receivedOpcode !== packetOpcode &&
-        receivedOpcode !== Anything &&
-        packetOpcode !== Anything
-      ) {
+      if (!isEqualWith(receivedOpcode, packetOpcode, anythingCatcher)) {
         return {
           pass: false,
           message: () =>
@@ -41,9 +37,7 @@ expect.extend({
             )} !== ${printPackets(packets)}`,
         };
       } else if (
-        !isEqualWith(receivedMessage, packetMessage, anythingCatcher) &&
-        receivedMessage !== Anything &&
-        packetMessage !== Anything
+        !isEqualWith(receivedMessage, packetMessage, anythingCatcher)
       ) {
         return {
           pass: false,

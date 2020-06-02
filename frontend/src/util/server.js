@@ -28,6 +28,9 @@ const SEND_OPS = {
   SELECT_GAME: 'SELECT_GAME',
   START_GAME: 'START_GAME',
 
+  // Test Game
+  TEST_GAME_CLICK_BUTTON: 'TEST_GAME_CLICK_BUTTON',
+
   // SEND_OPS without an expected response
   ATTEMPT_AUTO_AUTH: 'ATTEMPT_AUTO_AUTH',
   LOGOUT: 'LOGOUT',
@@ -45,6 +48,7 @@ const RECV_OPS = {
   EMPTY_LOBBY_ID_RESPONSE: 'EMPTY_LOBBY_ID_RESPONSE',
   LOBBY_STATE_CHANGE: 'LOBBY_STATE_CHANGE',
   LOBBY_CHAT_MESSAGE: 'LOBBY_CHAT_MESSAGE',
+  DECLARE_WINNER: 'DECLARE_WINNER',
 };
 
 export const AUTH_TOKEN_COOKIE = 'AUTH_TOKEN_COOKIE';
@@ -112,8 +116,13 @@ const removeListeners = listeners => {
   listeners.forEach(([recvOp, listenerId]) => removeListener(recvOp, listenerId));
 };
 
-// Try to authenticate automatically
+// Try to authenticate automatically initially.
 sendMessage(SEND_OPS.ATTEMPT_AUTO_AUTH, Cookies.get(AUTH_TOKEN_COOKIE));
+
+// Try to authenticate automatically on reconnect.
+addListener('reconnect', () => {
+  sendMessage(SEND_OPS.ATTEMPT_AUTO_AUTH, Cookies.get(AUTH_TOKEN_COOKIE));
+});
 
 export const registerAccount = (username, password, email) => {
   const payload = { username, password, email };
@@ -141,10 +150,16 @@ export const getEmptyLobbyId = () => {
   return sendAndListen(SEND_OPS.GET_EMPTY_LOBBY_ID, {}, RECV_OPS.EMPTY_LOBBY_ID_RESPONSE);
 };
 
-export const joinLobby = (id, lobbyUpdateCallback, chatUpdateCallback) => {
+export const joinLobby = (
+  id,
+  lobbyUpdateCallback,
+  chatUpdateCallback,
+  declareWinnerCallback
+) => {
   const listeners = sendAndAddListeners(SEND_OPS.JOIN_LOBBY, id, [
     [RECV_OPS.LOBBY_STATE_CHANGE, lobbyUpdateCallback],
     [RECV_OPS.LOBBY_CHAT_MESSAGE, chatUpdateCallback],
+    [RECV_OPS.DECLARE_WINNER, declareWinnerCallback],
   ]);
   return listeners;
 };
@@ -165,4 +180,8 @@ export const selectGame = game => {
 
 export const startGame = () => {
   sendMessage(SEND_OPS.START_GAME);
+};
+
+export const clickButton = () => {
+  sendMessage(SEND_OPS.TEST_GAME_CLICK_BUTTON);
 };

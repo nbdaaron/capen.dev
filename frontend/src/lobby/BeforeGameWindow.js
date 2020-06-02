@@ -2,6 +2,8 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import Chatbox from '../chat/Chatbox';
 import { startGame, selectGame, sendLobbyChatMessage } from '../util/server';
+import Games from '../games/Games';
+import { toPairs } from 'lodash';
 
 class BeforeGameWindow extends React.Component {
   constructor(props) {
@@ -53,9 +55,11 @@ class BeforeGameWindow extends React.Component {
           value={this.props.game}
           onChange={evt => selectGame(evt.target.value)}
         >
-          <option value="test">Test Game</option>
-          <option value="test2">Test Game 2</option>
-          <option value="test3">Test Game 3</option>
+          {toPairs(Games).map(([gameId, { title }]) => (
+            <option value={gameId} key={gameId}>
+              {title}
+            </option>
+          ))}
         </select>
         <Chatbox messages={this.props.chatMessages} sendMessage={sendLobbyChatMessage} />
         <button

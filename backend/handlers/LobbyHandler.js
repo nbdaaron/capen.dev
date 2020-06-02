@@ -6,7 +6,7 @@ const {
 } = require("../games/lobbies");
 const { SuccessResponse } = require("../model/response");
 const Message = require("../model/message");
-const { authenticatedOnly } = require("./util");
+const { authenticatedOnly, inLobbyOnly } = require("./util");
 
 // RECV_OPS
 const GET_EMPTY_LOBBY_ID = "GET_EMPTY_LOBBY_ID";
@@ -43,61 +43,51 @@ const LobbyHandler = (socket, io) => {
 
   socket.on(
     LEAVE_LOBBY,
-    authenticatedOnly(socket, function () {
+    inLobbyOnly(socket, function () {
       const lobbyId = socket.user.lobbyId;
-      if (lobbyId) {
-        leaveLobby(lobbyId, socket.user);
-        io.to(lobbyId).emit(LOBBY_STATE_CHANGE, getLobby(lobbyId));
-        socket.leave(lobbyId);
-      }
+      leaveLobby(lobbyId, socket.user);
+      io.to(lobbyId).emit(LOBBY_STATE_CHANGE, getLobby(lobbyId));
+      socket.leave(lobbyId);
     })
   );
 
   socket.on(
     SEND_LOBBY_CHAT_MESSAGE,
-    authenticatedOnly(socket, function (message) {
+    inLobbyOnly(socket, function (message) {
       const lobbyId = socket.user.lobbyId;
-      if (lobbyId) {
-        io.to(lobbyId).emit(
-          LOBBY_CHAT_MESSAGE,
-          new Message(socket.user, message)
-        );
-      }
+      io.to(lobbyId).emit(
+        LOBBY_CHAT_MESSAGE,
+        new Message(socket.user, message)
+      );
     })
   );
 
   socket.on(
     SELECT_GAME,
-    authenticatedOnly(socket, function (game) {
+    inLobbyOnly(socket, function (game) {
       const lobbyId = socket.user.lobbyId;
-      if (lobbyId) {
-        getLobby(lobbyId).setGame(game);
-        io.to(lobbyId).emit(LOBBY_STATE_CHANGE, getLobby(lobbyId));
-      }
+      getLobby(lobbyId).setGame(game);
+      io.to(lobbyId).emit(LOBBY_STATE_CHANGE, getLobby(lobbyId));
     })
   );
 
   socket.on(
     START_GAME,
-    authenticatedOnly(socket, function () {
+    inLobbyOnly(socket, function () {
       const lobbyId = socket.user.lobbyId;
-      if (lobbyId) {
-        getLobby(lobbyId).setInGame(true);
-        io.to(lobbyId).emit(LOBBY_STATE_CHANGE, getLobby(lobbyId));
-      }
+      getLobby(lobbyId).setInGame(true);
+      io.to(lobbyId).emit(LOBBY_STATE_CHANGE, getLobby(lobbyId));
     })
   );
 
   // Disconnect handler
   socket.on(
     "disconnect",
-    authenticatedOnly(socket, function () {
+    inLobbyOnly(socket, function () {
       const lobbyId = socket.user.lobbyId;
-      if (lobbyId) {
-        leaveLobby(lobbyId, socket.user);
-        io.to(lobbyId).emit(LOBBY_STATE_CHANGE, getLobby(lobbyId));
-        socket.leave(lobbyId);
-      }
+      leaveLobby(lobbyId, socket.user);
+      io.to(lobbyId).emit(LOBBY_STATE_CHANGE, getLobby(lobbyId));
+      socket.leave(lobbyId);
     })
   );
 };
