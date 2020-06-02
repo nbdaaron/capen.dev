@@ -1,5 +1,5 @@
 import React from 'react';
-import { joinLobby, leaveLobby } from '../util/server';
+import { joinLobby, leaveLobby } from '../server/lobby';
 import BeforeGameWindow from '../lobby/BeforeGameWindow';
 import Game from '../lobby/Game';
 import Games from '../games/Games';

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Chatbox from '../chat/Chatbox';
-import { startGame, selectGame, sendLobbyChatMessage } from '../util/server';
+import { startGame, selectGame, sendLobbyChatMessage } from '../server/lobby';
 import Games from '../games/Games';
 import { toPairs } from 'lodash';
 

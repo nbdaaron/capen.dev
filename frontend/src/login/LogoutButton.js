@@ -1,5 +1,6 @@
 import React from 'react';
-import { AUTH_TOKEN_COOKIE, logout } from '../util/server';
+import { AUTH_TOKEN_COOKIE } from '../server/socket';
+import { logout } from '../server/login';
 import Cookies from 'js-cookie';
 
 class LogoutButton extends React.Component {

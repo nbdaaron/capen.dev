@@ -2,10 +2,10 @@ import React from 'react';
 import { render, waitFor } from '@testing-library/react';
 import Lobby from './Lobby';
 import { wrapRouter } from '../util/testing';
-import { joinLobby } from '../util/server';
+import { joinLobby } from '../server/lobby';
 import { mockUser } from '../util/mock';
 
-jest.mock('../util/server', () => {
+jest.mock('../server/lobby', () => {
   return {
     __esModule: true,
     joinLobby: jest.fn(),

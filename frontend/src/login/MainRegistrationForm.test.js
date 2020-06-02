@@ -3,9 +3,9 @@ import { fireEvent, render, waitFor } from '@testing-library/react';
 import MainRegistrationForm from './MainRegistrationForm';
 import { getCurrentRoute, wrapRouter } from '../util/testing';
 import { mockErrorResponse, mockSuccessResponse } from '../util/mock';
-import { registerAccount } from '../util/server';
+import { registerAccount } from '../server/login';
 
-jest.mock('../util/server', () => {
+jest.mock('../server/login', () => {
   return {
     __esModule: true,
     registerAccount: jest.fn(),

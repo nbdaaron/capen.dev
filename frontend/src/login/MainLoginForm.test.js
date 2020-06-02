@@ -3,11 +3,12 @@ import { MemoryRouter } from 'react-router-dom';
 import { render, fireEvent, waitFor } from '@testing-library/react';
 import MainLoginForm from './MainLoginForm';
 import { wrapRouter, getCurrentRoute } from '../util/testing';
-import { tryLogin, loginAsGuest, AUTH_TOKEN_COOKIE } from '../util/server';
+import { tryLogin, loginAsGuest } from '../server/login';
+import { AUTH_TOKEN_COOKIE } from '../server/socket';
 import Cookies from 'js-cookie';
 import { mockSuccessResponse, mockErrorResponse } from '../util/mock';
 
-jest.mock('../util/server', () => {
+jest.mock('../server/login', () => {
   return {
     __esModule: true,
     tryLogin: jest.fn(),

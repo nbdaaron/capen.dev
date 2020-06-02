@@ -2,10 +2,10 @@ import React from 'react';
 import { render, waitFor, fireEvent } from '@testing-library/react';
 import CreateLobbyButton from './CreateLobbyButton';
 import { wrapRouter, getCurrentRoute } from '../util/testing';
-import { getEmptyLobbyId } from '../util/server';
+import { getEmptyLobbyId } from '../server/lobby';
 import { mockSuccessResponse, mockErrorResponse } from '../util/mock';
 
-jest.mock('../util/server', () => {
+jest.mock('../server/lobby', () => {
   return {
     __esModule: true,
     getEmptyLobbyId: jest.fn(),

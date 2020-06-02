@@ -1,5 +1,5 @@
 import React from 'react';
-import { clickButton } from '../util/server';
+import { clickButton } from '../server/testGame';
 
 class TestGame extends React.Component {
   render() {

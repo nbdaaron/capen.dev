@@ -1,5 +1,5 @@
 import openSocket from 'socket.io-client';
-import { TIMEOUT_ERROR } from './error';
+import { TIMEOUT_ERROR } from '../util/error';
 import Cookies from 'js-cookie';
 
 const host =
@@ -11,7 +11,7 @@ const socket = openSocket(host, {
   transports: ['websocket', 'polling'],
 });
 
-const SEND_OPS = {
+export const SEND_OPS = {
   // Account Registration
   REGISTER_ACCOUNT: 'REGISTER_ACCOUNT',
 
@@ -36,7 +36,7 @@ const SEND_OPS = {
   LOGOUT: 'LOGOUT',
 };
 
-const RECV_OPS = {
+export const RECV_OPS = {
   // Account Registration
   REGISTER_RESPONSE: 'REGISTER_RESPONSE',
 
@@ -53,7 +53,7 @@ const RECV_OPS = {
 
 export const AUTH_TOKEN_COOKIE = 'AUTH_TOKEN_COOKIE';
 
-const sendMessage = (sendOp, payload) => {
+export const sendMessage = (sendOp, payload) => {
   socket.emit(sendOp, payload);
 };
 
@@ -84,7 +84,7 @@ const isSuccessResponse = response => response.success;
  *   3. If the timeout elapses first (4 seconds by default), the promise
  *      rejects with a generic timeout error (see ./error.js)
  */
-const sendAndListen = (sendOp, payload, recvOp, timeout = 4000) => {
+export const sendAndListen = (sendOp, payload, recvOp, timeout = 4000) => {
   sendMessage(sendOp, payload);
 
   return new Promise((resolve, reject) => {
@@ -103,7 +103,7 @@ const sendAndListen = (sendOp, payload, recvOp, timeout = 4000) => {
   });
 };
 
-const sendAndAddListeners = (sendOp, payload, recvOperations) => {
+export const sendAndAddListeners = (sendOp, payload, recvOperations) => {
   sendMessage(sendOp, payload);
 
   return recvOperations.map(([recvOp, callback]) => {
@@ -112,7 +112,7 @@ const sendAndAddListeners = (sendOp, payload, recvOperations) => {
   });
 };
 
-const removeListeners = listeners => {
+export const removeListeners = listeners => {
   listeners.forEach(([recvOp, listenerId]) => removeListener(recvOp, listenerId));
 };
 
@@ -123,65 +123,3 @@ sendMessage(SEND_OPS.ATTEMPT_AUTO_AUTH, Cookies.get(AUTH_TOKEN_COOKIE));
 addListener('reconnect', () => {
   sendMessage(SEND_OPS.ATTEMPT_AUTO_AUTH, Cookies.get(AUTH_TOKEN_COOKIE));
 });
-
-export const registerAccount = (username, password, email) => {
-  const payload = { username, password, email };
-  return sendAndListen(SEND_OPS.REGISTER_ACCOUNT, payload, RECV_OPS.REGISTER_RESPONSE);
-};
-
-export const tryLogin = (username, password) => {
-  const payload = { username, password };
-  return sendAndListen(SEND_OPS.TRY_LOGIN, payload, RECV_OPS.LOGIN_RESPONSE);
-};
-
-export const loginAsGuest = () => {
-  return sendAndListen(SEND_OPS.LOGIN_AS_GUEST, null, RECV_OPS.LOGIN_RESPONSE);
-};
-
-export const logout = () => {
-  sendMessage(SEND_OPS.LOGOUT);
-};
-
-export const getUserInfo = () => {
-  return sendAndListen(SEND_OPS.GET_USER_INFO, {}, RECV_OPS.USER_INFO_RESPONSE);
-};
-
-export const getEmptyLobbyId = () => {
-  return sendAndListen(SEND_OPS.GET_EMPTY_LOBBY_ID, {}, RECV_OPS.EMPTY_LOBBY_ID_RESPONSE);
-};
-
-export const joinLobby = (
-  id,
-  lobbyUpdateCallback,
-  chatUpdateCallback,
-  declareWinnerCallback
-) => {
-  const listeners = sendAndAddListeners(SEND_OPS.JOIN_LOBBY, id, [
-    [RECV_OPS.LOBBY_STATE_CHANGE, lobbyUpdateCallback],
-    [RECV_OPS.LOBBY_CHAT_MESSAGE, chatUpdateCallback],
-    [RECV_OPS.DECLARE_WINNER, declareWinnerCallback],
-  ]);
-  return listeners;
-};
-
-// TODO - remove id here...
-export const leaveLobby = (id, listeners) => {
-  sendMessage(SEND_OPS.LEAVE_LOBBY, id);
-  removeListeners(listeners);
-};
-
-export const sendLobbyChatMessage = msg => {
-  sendMessage(SEND_OPS.SEND_LOBBY_CHAT_MESSAGE, msg);
-};
-
-export const selectGame = game => {
-  sendMessage(SEND_OPS.SELECT_GAME, game);
-};
-
-export const startGame = () => {
-  sendMessage(SEND_OPS.START_GAME);
-};
-
-export const clickButton = () => {
-  sendMessage(SEND_OPS.TEST_GAME_CLICK_BUTTON);
-};

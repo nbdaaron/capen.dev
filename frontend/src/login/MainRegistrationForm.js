@@ -1,6 +1,6 @@
 import React from 'react';
-import { registerAccount } from '../util/server';
-import Loader from '../util/Loader';
+import { registerAccount } from '../server/login';
+import Loader from '../shared/Loader';
 import { Redirect } from 'react-router-dom';
 
 class MainRegistrationForm extends React.Component {

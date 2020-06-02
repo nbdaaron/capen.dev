@@ -3,7 +3,6 @@ import { render, waitFor } from '@testing-library/react';
 import Chatbox from './Chatbox';
 import { wrapRouter, getCurrentRoute } from '../util/testing';
 import { mockErrorResponse, mockSuccessResponse, mockUser } from '../util/mock';
-import { getEmptyLobbyId } from '../util/server';
 
 test('displays correctly', async () => {
   const messages = [{ id: 1, sender: mockUser(), message: 'hello' }];

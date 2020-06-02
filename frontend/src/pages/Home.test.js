@@ -3,9 +3,9 @@ import { render, waitFor } from '@testing-library/react';
 import Home from './Home';
 import { wrapRouter, getCurrentRoute } from '../util/testing';
 import { mockErrorResponse, mockSuccessResponse, mockUser } from '../util/mock';
-import { getEmptyLobbyId } from '../util/server';
+import { getEmptyLobbyId } from '../server/lobby';
 
-jest.mock('../util/server', () => {
+jest.mock('../server/lobby', () => {
   return {
     __esModule: true,
     getEmptyLobbyId: jest.fn(),

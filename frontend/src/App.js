@@ -8,8 +8,8 @@ import Register from './pages/Register';
 import RegisterComplete from './pages/RegisterComplete';
 import Teaser from './pages/Teaser';
 import { Switch, Route, Redirect } from 'react-router-dom';
-import Loader from './util/Loader';
-import { getUserInfo } from './util/server';
+import Loader from './shared/Loader';
+import { getUserInfo } from './server/login';
 
 const UNAUTHENTICATED_ROUTES = [
   [Login, '/login'],

@@ -2,9 +2,9 @@ import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
 import TestGame from './TestGame';
 import { mockUser, MockElement } from '../util/mock';
-import { clickButton } from '../util/server';
+import { clickButton } from '../server/testGame';
 
-jest.mock('../util/server', () => ({
+jest.mock('../server/testGame', () => ({
   __esModule: true,
   clickButton: jest.fn(),
 }));

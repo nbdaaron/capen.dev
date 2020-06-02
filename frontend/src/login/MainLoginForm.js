@@ -1,7 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { AUTH_TOKEN_COOKIE, tryLogin, loginAsGuest } from '../util/server';
-import Loader from '../util/Loader';
+import { AUTH_TOKEN_COOKIE } from '../server/socket';
+import { tryLogin, loginAsGuest } from '../server/login';
+import Loader from '../shared/Loader';
 import Cookies from 'js-cookie';
 
 class MainLoginForm extends React.Component {

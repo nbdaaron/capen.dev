@@ -3,7 +3,7 @@ import { render, fireEvent } from '@testing-library/react';
 import LogoutButton from './LogoutButton';
 import { wrapRouter, getCurrentRoute } from '../util/testing';
 import Cookies from 'js-cookie';
-import { AUTH_TOKEN_COOKIE } from '../util/server';
+import { AUTH_TOKEN_COOKIE } from '../server/socket';
 
 jest.mock('js-cookie', () => {
   return {

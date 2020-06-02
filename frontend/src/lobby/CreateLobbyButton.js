@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { getEmptyLobbyId } from '../util/server';
+import { getEmptyLobbyId } from '../server/lobby';
 
 class CreateLobbyButton extends React.Component {
   constructor(props) {
