@@ -314,8 +314,8 @@ class BombGame extends React.Component {
       }
     }
 
-    for (var x = 0; x < WIDTH_IN_BLOCKS; x++) {
-      for (var y = 0; y < HEIGHT_IN_BLOCKS; y++) {
+    for (x = 0; x < WIDTH_IN_BLOCKS; x++) {
+      for (y = 0; y < HEIGHT_IN_BLOCKS; y++) {
         if (board[x][y] === OBJECTS.EXTRA_BOMB_POWERUP) {
           context.fillStyle = 'black';
           context.fillText('+1 Bomb', 100 * x, 100 * y + 50);
