@@ -90,6 +90,7 @@ class BombGame extends React.Component {
       Date.now() - this.boardState.lastMessageTimestamp > 1000
     ) {
       Object.keys(this.boardState.players).forEach(playerId => {
+        // eslint-disable-next-line eqeqeq
         if (playerId != this.props.user.id) {
           this.boardState.players[playerId].moving = false;
         }
@@ -126,6 +127,7 @@ class BombGame extends React.Component {
     Object.keys(players).forEach(id => {
       const player = players[id];
       const localPlayer = this.boardState.players[id];
+      // eslint-disable-next-line eqeqeq
       if (id == this.props.user.id) {
         if (!this.validateServerPosition(localPlayer, players[id])) {
           player.position = this.tryMove(player, timeDelta);
