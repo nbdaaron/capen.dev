@@ -12,7 +12,7 @@ cd ..
 
 # Test backend code
 cd backend
-npm test
+npx jest
 npx eslint .
 npx prettier . --check
 
