@@ -52,6 +52,7 @@ const LobbyHandler = (socket, io) => {
       lobby.removeUser(socket.user);
       delete socket.user.lobby;
       if (lobby.isEmpty()) {
+        lobby.cleanup();
         delete lobbies[lobby.id];
       }
       io.to(lobby.id).emit(LOBBY_STATE_CHANGE, lobby);
@@ -96,6 +97,7 @@ const LobbyHandler = (socket, io) => {
       lobby.removeUser(socket.user);
       delete socket.user.lobby;
       if (lobby.isEmpty()) {
+        lobby.cleanup();
         delete lobbies[lobby.id];
       }
       io.to(lobby.id).emit(LOBBY_STATE_CHANGE, lobby);

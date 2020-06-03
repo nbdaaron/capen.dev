@@ -8,6 +8,7 @@ const {
 } = require("./constants");
 const Player = require("./player");
 const Game = require("../game");
+const Bomb = require("./bomb");
 
 // SEND_OPS
 const BOMB_GAME_UPDATE_BOARD = "BOMB_GAME_UPDATE_BOARD";
@@ -17,12 +18,13 @@ class BombGame extends Game {
     super(io, lobby);
     this.players = BombGame.initializePlayers(lobby.users);
     this.board = BombGame.generateRandomBoard();
+    this.bombs = [];
     this.interval = setInterval(
       () => io.to(lobby.id).emit(BOMB_GAME_UPDATE_BOARD, this),
       REFRESH_RATE
     );
     // auto end game
-    setTimeout(() => this.finishGame(lobby.users[0]), 10000);
+    setTimeout(() => this.finishGame(lobby.users[0]), 100000);
   }
 
   toJSON() {
@@ -77,10 +79,34 @@ class BombGame extends Game {
     return board;
   }
 
+  static getCoordinatesForPosition(position) {
+    const [x, y] = position;
+    return [Math.floor((x + 49) / 100), Math.floor((y + 49) / 100)];
+  }
+
   updatePlayer(user, player) {
     if (this.players[user.id]) {
       this.players[user.id].update(player);
     }
+  }
+
+  requestPlantBomb(user, position) {
+    if (
+      this.players[user.id] &&
+      this.players[user.id].validatePosition(position)
+    ) {
+      const [x, y] = BombGame.getCoordinatesForPosition(position);
+      if (
+        this.board[x][y] === OBJECTS.EMPTY &&
+        this.players[user.id].bombs > 0
+      ) {
+        this.plantBomb(user, x, y);
+      }
+    }
+  }
+
+  plantBomb(user, x, y) {
+    this.bombs.push(new Bomb(user, x, y, this));
   }
 }
 

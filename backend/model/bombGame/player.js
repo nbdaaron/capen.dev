@@ -6,8 +6,9 @@ class Player {
     this.direction = Player.getStartingDirection(index);
     this.moving = false;
     this.speed = 0.2;
-    this.bombs = 1;
-    this.power = 1;
+    this.bombs = 3;
+    this.power = 3;
+    this.lastUpdateTime = Date.now();
   }
 
   static getStartingPosition(index) {
@@ -39,22 +40,28 @@ class Player {
   }
 
   update(newPlayer) {
+    if (this.validatePosition(newPlayer.position)) {
+      this.position = newPlayer.position;
+      this.direction = newPlayer.direction;
+      this.moving = newPlayer.moving;
+    }
+    this.lastUpdateTime = Date.now();
+  }
+
+  validatePosition(newPosition) {
     // Validate position
     const leeway = 200;
     const deltaTime = Date.now() - this.lastUpdateTime;
-    const radius = deltaTime * newPlayer.speed + leeway;
+    const radius = deltaTime * this.speed + leeway;
 
     const [oldX, oldY] = this.position;
-    const [newX, newY] = newPlayer.position;
+    const [newX, newY] = newPosition;
 
     if (newX - oldX > radius || newY - oldY > radius) {
-      // Hacking/cheating attempt??? Ignore this packet for now.
-      return;
+      // Hacking/cheating attempt???
+      return false;
     }
-
-    this.position = newPlayer.position;
-    this.direction = newPlayer.direction;
-    this.moving = newPlayer.moving;
+    return true;
   }
 }
 

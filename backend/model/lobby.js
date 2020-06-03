@@ -14,6 +14,12 @@ class Lobby {
     return Math.floor(Math.random() * MAX_LOBBY_ID);
   }
 
+  cleanup() {
+    if (this.game) {
+      this.game.finishGame();
+    }
+  }
+
   toJSON() {
     return {
       id: this.id,

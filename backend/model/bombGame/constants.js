@@ -49,6 +49,12 @@ const BOX_CHANCE = 0.5;
 // Update clients with my state every 300ms.
 const REFRESH_RATE = 300;
 
+// Bombs explode after 3 seconds.
+const BOMB_DURATION = 3000;
+
+// Bomb explosions last 300ms
+const EXPLOSION_DURATION = 300;
+
 module.exports = {
   WIDTH_IN_BLOCKS,
   HEIGHT_IN_BLOCKS,
@@ -57,4 +63,6 @@ module.exports = {
   ALWAYS_EMPTY_SPACES,
   BOX_CHANCE,
   REFRESH_RATE,
+  BOMB_DURATION,
+  EXPLOSION_DURATION,
 };

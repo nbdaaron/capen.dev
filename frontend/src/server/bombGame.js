@@ -8,12 +8,12 @@ export const stopListenForGameUpdates = listener => {
   removeListener(RECV_OPS.BOMB_GAME_UPDATE_BOARD, listener);
 };
 
-export const updatePosition = position => {
-  sendMessage(SEND_OPS.BOMB_GAME_UPDATE_PLAYER, position);
+export const updatePlayer = player => {
+  sendMessage(SEND_OPS.BOMB_GAME_UPDATE_PLAYER, player);
 };
 
-export const plantBomb = () => {
-  sendMessage(SEND_OPS.BOMB_GAME_PLANT_BOMB);
+export const plantBomb = position => {
+  sendMessage(SEND_OPS.BOMB_GAME_PLANT_BOMB, position);
 };
 
 export const lootPowerup = () => {

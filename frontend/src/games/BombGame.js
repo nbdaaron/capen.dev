@@ -1,7 +1,7 @@
 import React from 'react';
 import {
-  updatePosition,
-  //plantBomb,
+  updatePlayer,
+  plantBomb,
   //lootPowerup,
   listenForGameUpdates,
   stopListenForGameUpdates,
@@ -36,6 +36,7 @@ const KEY = {
 const REFRESH_RATE = 300;
 
 const isArrowKey = event => event.keyCode >= KEY.LEFT && event.keyCode <= KEY.DOWN;
+const isSpaceKey = event => event.keyCode === KEY.SPACE;
 
 class BombGame extends React.Component {
   constructor(props) {
@@ -146,7 +147,7 @@ class BombGame extends React.Component {
     const playerId = this.props.user.id;
     if (players[playerId] && !this.updateServerLoop) {
       this.updateServerLoop = window.setInterval(
-        () => updatePosition(this.boardState.players[playerId]),
+        () => updatePlayer(this.boardState.players[playerId]),
         REFRESH_RATE
       );
     }
@@ -293,8 +294,14 @@ class BombGame extends React.Component {
           context.fillStyle = 'green';
         } else if (board[x][y] === OBJECTS.WALL) {
           context.fillStyle = 'grey';
-        } else {
+        } else if (board[x][y] === OBJECTS.BOMB) {
+          context.fillStyle = 'black';
+        } else if (board[x][y] === OBJECTS.BOX) {
+          context.fillStyle = 'brown';
+        } else if (board[x][y] === OBJECTS.EXPLOSION_PARTICLE) {
           context.fillStyle = 'red';
+        } else {
+          context.fillStyle = 'blue';
         }
         context.fillRect(100 * x, 100 * y, 100, 100);
       }
@@ -313,6 +320,8 @@ class BombGame extends React.Component {
     if (players[playerId] && isArrowKey(event)) {
       players[playerId].moving = true;
       players[playerId].direction = event.keyCode;
+    } else if (players[playerId] && isSpaceKey(event)) {
+      plantBomb(players[playerId].position);
     }
   }
 
