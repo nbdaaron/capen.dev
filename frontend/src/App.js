@@ -11,8 +11,6 @@ import { Switch, Route, Redirect } from 'react-router-dom';
 import Loader from './shared/Loader';
 import { getUserInfo } from './server/login';
 
-import BombGame from './games/BombGame';
-
 const UNAUTHENTICATED_ROUTES = [
   [Login, '/login'],
   [Register, '/register'],
@@ -26,7 +24,6 @@ const AUTHENTICATED_ROUTES = [
   [Home, '/home'],
   [Lobby, '/lobby/:id'],
   [Teaser, '/'],
-  [BombGame, '/bombgame'],
 ];
 
 const AUTHENTICATED_REDIRECT = '/home';
