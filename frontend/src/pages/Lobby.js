@@ -12,7 +12,7 @@ class Lobby extends React.Component {
       users: [this.props.user],
       chatMessages: [],
       inGame: false,
-      game: Object.keys(Games)[0],
+      gameId: Object.keys(Games)[0],
       winner: null,
     };
     this.updateLobbyState = this.updateLobbyState.bind(this);
@@ -31,8 +31,7 @@ class Lobby extends React.Component {
   }
 
   componentWillUnmount() {
-    const id = this.props.match.params.id;
-    leaveLobby(id, this.listeners);
+    leaveLobby(this.listeners);
     delete this.listeners;
   }
 
@@ -58,19 +57,19 @@ class Lobby extends React.Component {
 
   render() {
     const { user } = this.props;
-    const { game, chatMessages, users, inGame, winner } = this.state;
+    const { gameId, chatMessages, users, inGame, winner } = this.state;
 
     if (inGame) {
-      return <Game game={game} user={user} />;
+      return <Game gameId={gameId} user={user} />;
     } else if (this.state.winner) {
-      return <WinnerWindow game={game} winner={winner} return={this.clearWinner} />;
+      return <WinnerWindow gameId={gameId} winner={winner} return={this.clearWinner} />;
     }
 
     return (
       <BeforeGameWindow
         user={user}
         users={users}
-        game={game}
+        gameId={gameId}
         chatMessages={chatMessages}
       />
     );

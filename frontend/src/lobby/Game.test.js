@@ -15,7 +15,7 @@ jest.mock('../games/Games', () => ({
 }));
 
 test('displays game', () => {
-  const { getByText } = render(<Game game="game123" />);
+  const { getByText } = render(<Game gameId="game123" />);
   expect(getByText(/Mock Fake Element/i)).toBeInTheDocument();
 });
 

@@ -1,12 +1,6 @@
-const {
-  getEmptyLobbyId,
-  getLobby,
-  joinLobby,
-  leaveLobby,
-  startGame,
-} = require("../games/lobbies");
 const { SuccessResponse } = require("../model/response");
 const Message = require("../model/message");
+const Lobby = require("../model/lobby");
 const { authenticatedOnly, inLobbyOnly } = require("./util");
 
 // RECV_OPS
@@ -22,41 +16,54 @@ const EMPTY_LOBBY_ID_RESPONSE = "EMPTY_LOBBY_ID_RESPONSE";
 const LOBBY_STATE_CHANGE = "LOBBY_STATE_CHANGE";
 const LOBBY_CHAT_MESSAGE = "LOBBY_CHAT_MESSAGE";
 
+const lobbies = {};
+
 const LobbyHandler = (socket, io) => {
   socket.on(
     GET_EMPTY_LOBBY_ID,
     authenticatedOnly(socket, function () {
-      socket.emit(
-        EMPTY_LOBBY_ID_RESPONSE,
-        new SuccessResponse(getEmptyLobbyId())
-      );
+      let id = Lobby.generateRandomId();
+      while (lobbies[id]) {
+        id = Lobby.generateRandomId();
+      }
+      socket.emit(EMPTY_LOBBY_ID_RESPONSE, new SuccessResponse(id));
     })
   );
 
   socket.on(
     JOIN_LOBBY,
     authenticatedOnly(socket, function (lobbyId) {
-      joinLobby(lobbyId, socket.user);
+      // Lobby is empty, create lobby.
+      if (!lobbies[lobbyId]) {
+        lobbies[lobbyId] = new Lobby(lobbyId, socket.user);
+      } else {
+        lobbies[lobbyId].addUser(socket.user);
+      }
+      socket.user.lobby = lobbies[lobbyId];
       socket.join(lobbyId);
-      io.to(lobbyId).emit(LOBBY_STATE_CHANGE, getLobby(lobbyId));
+      io.to(lobbyId).emit(LOBBY_STATE_CHANGE, lobbies[lobbyId]);
     })
   );
 
   socket.on(
     LEAVE_LOBBY,
     inLobbyOnly(socket, function () {
-      const lobbyId = socket.user.lobbyId;
-      leaveLobby(lobbyId, socket.user);
-      io.to(lobbyId).emit(LOBBY_STATE_CHANGE, getLobby(lobbyId));
-      socket.leave(lobbyId);
+      const lobby = socket.user.lobby;
+      lobby.removeUser(socket.user);
+      delete socket.user.lobby;
+      if (lobby.isEmpty()) {
+        delete lobbies[lobby.id];
+      }
+      io.to(lobby.id).emit(LOBBY_STATE_CHANGE, lobby);
+      socket.leave(lobby.id);
     })
   );
 
   socket.on(
     SEND_LOBBY_CHAT_MESSAGE,
     inLobbyOnly(socket, function (message) {
-      const lobbyId = socket.user.lobbyId;
-      io.to(lobbyId).emit(
+      const lobby = socket.user.lobby;
+      io.to(lobby.id).emit(
         LOBBY_CHAT_MESSAGE,
         new Message(socket.user, message)
       );
@@ -65,19 +72,19 @@ const LobbyHandler = (socket, io) => {
 
   socket.on(
     SELECT_GAME,
-    inLobbyOnly(socket, function (game) {
-      const lobbyId = socket.user.lobbyId;
-      getLobby(lobbyId).setGame(game);
-      io.to(lobbyId).emit(LOBBY_STATE_CHANGE, getLobby(lobbyId));
+    inLobbyOnly(socket, function (gameId) {
+      const lobby = socket.user.lobby;
+      lobbies[lobby.id].gameId = gameId;
+      io.to(lobby.id).emit(LOBBY_STATE_CHANGE, lobby);
     })
   );
 
   socket.on(
     START_GAME,
     inLobbyOnly(socket, function () {
-      const lobbyId = socket.user.lobbyId;
-      startGame(io, lobbyId);
-      io.to(lobbyId).emit(LOBBY_STATE_CHANGE, getLobby(lobbyId));
+      const lobby = socket.user.lobby;
+      lobby.startGame(io);
+      io.to(lobby.id).emit(LOBBY_STATE_CHANGE, lobby);
     })
   );
 
@@ -85,10 +92,14 @@ const LobbyHandler = (socket, io) => {
   socket.on(
     "disconnect",
     inLobbyOnly(socket, function () {
-      const lobbyId = socket.user.lobbyId;
-      leaveLobby(lobbyId, socket.user);
-      io.to(lobbyId).emit(LOBBY_STATE_CHANGE, getLobby(lobbyId));
-      socket.leave(lobbyId);
+      const lobby = socket.user.lobby;
+      lobby.removeUser(socket.user);
+      delete socket.user.lobby;
+      if (lobby.isEmpty()) {
+        delete lobbies[lobby.id];
+      }
+      io.to(lobby.id).emit(LOBBY_STATE_CHANGE, lobby);
+      socket.leave(lobby.id);
     })
   );
 };

@@ -28,7 +28,7 @@ test("Should notify all members when someone joins/leaves lobby", () => {
 
   const remainingLobbyData = {
     id: 12345,
-    game: "test",
+    gameId: "test",
     inGame: false,
   };
 

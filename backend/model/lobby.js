@@ -1,40 +1,44 @@
 // Lobbies will be (for the most part) 13-digit numbers.
 const MAX_LOBBY_ID = 1e14;
+const BombGame = require("./bombGame/bombGame");
+const TestGame = require("./testGame/testGame");
 
 class Lobby {
   constructor(id, creator) {
     this.id = id;
     this.users = [creator];
-    this.game = "test";
-    this.inGame = false;
+    this.gameId = "test";
   }
 
   static generateRandomId() {
     return Math.floor(Math.random() * MAX_LOBBY_ID);
   }
 
-  getGame() {
-    return this.game;
+  toJSON() {
+    return {
+      id: this.id,
+      users: this.users,
+      gameId: this.gameId,
+      inGame: this.isInGame(),
+    };
   }
 
-  setGame(game) {
-    this.game = game;
+  startGame(io) {
+    if (this.gameId === "test") {
+      this.game = new TestGame(io, this);
+    } else if (this.gameId === "bomb") {
+      this.game = new BombGame(io, this);
+    } else {
+      throw new Error(`Game ID ${this.gameId} doesn't exist.`);
+    }
   }
 
-  getInGame() {
-    return this.inGame;
-  }
-
-  setInGame(val) {
-    this.inGame = val;
+  isInGame() {
+    return this.game !== undefined;
   }
 
   getLeader() {
     return this.users[0];
-  }
-
-  getUsers() {
-    return this.users;
   }
 
   userCount() {

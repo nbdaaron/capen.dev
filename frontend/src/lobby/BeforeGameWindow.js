@@ -52,7 +52,7 @@ class BeforeGameWindow extends React.Component {
           className="btn-dark"
           name="game"
           disabled={!this.isLeader()}
-          value={this.props.game}
+          value={this.props.gameId}
           onChange={evt => selectGame(evt.target.value)}
         >
           {toPairs(Games).map(([gameId, { title }]) => (

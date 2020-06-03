@@ -5,7 +5,7 @@ import Games from '../games/Games';
 
 class Game extends React.Component {
   render() {
-    const GameComponent = Games[this.props.game] && Games[this.props.game].component;
+    const GameComponent = Games[this.props.gameId] && Games[this.props.gameId].component;
     if (GameComponent) {
       return <GameComponent {...this.props} />;
     } else {

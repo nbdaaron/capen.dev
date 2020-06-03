@@ -1,5 +1,3 @@
-const { getLobby } = require("../games/lobbies");
-
 const authenticatedOnly = (socket, fn) => {
   return (param) => {
     if (socket.user) {
@@ -10,7 +8,7 @@ const authenticatedOnly = (socket, fn) => {
 
 const inLobbyOnly = (socket, fn) => {
   return (param) => {
-    if (socket.user && socket.user.lobbyId) {
+    if (socket.user && socket.user.lobby) {
       fn(param);
     }
   };
@@ -18,10 +16,10 @@ const inLobbyOnly = (socket, fn) => {
 
 const inGameOnly = (socket, gameId, fn) => {
   return (param) => {
-    if (socket.user && socket.user.lobbyId) {
-      const lobby = getLobby(socket.user.lobbyId);
-      if (lobby.getGame() === gameId && lobby.getInGame()) {
-        fn(param);
+    if (socket.user && socket.user.lobby) {
+      const lobby = socket.user.lobby;
+      if (lobby.gameId === gameId && lobby.isInGame()) {
+        fn(lobby.game, param);
       }
     }
   };

@@ -25,9 +25,8 @@ export const joinLobby = (
   return listeners;
 };
 
-// TODO - remove id here...
-export const leaveLobby = (id, listeners) => {
-  sendMessage(SEND_OPS.LEAVE_LOBBY, id);
+export const leaveLobby = listeners => {
+  sendMessage(SEND_OPS.LEAVE_LOBBY);
   removeListeners(listeners);
 };
 

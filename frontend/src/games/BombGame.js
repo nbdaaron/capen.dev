@@ -163,11 +163,9 @@ class BombGame extends React.Component {
     const [clientX, clientY] = clientPlayer.position;
     const [serverX, serverY] = serverPlayer.position;
     if (Math.abs(serverY - clientY) > radius) {
-      console.log('Validation failed, y too far off');
       return false;
     }
     if (Math.abs(serverX - clientX) > radius) {
-      console.log('Validation failed, x too far off');
       return false;
     }
 
@@ -246,7 +244,11 @@ class BombGame extends React.Component {
     }
 
     const objectOnBoard = this.boardState.board[newBoardX][newBoardY];
-    if (objectOnBoard === OBJECTS.WALL || objectOnBoard === OBJECTS.BOMB) {
+    if (
+      objectOnBoard === OBJECTS.WALL ||
+      objectOnBoard === OBJECTS.BOMB ||
+      objectOnBoard === OBJECTS.BOX
+    ) {
       return [revertX, revertY];
     }
 
@@ -259,7 +261,6 @@ class BombGame extends React.Component {
     document.addEventListener('keydown', this.handleKeyDown);
     document.addEventListener('keyup', this.handleKeyUp);
     this.animationFrameId = window.requestAnimationFrame(this.gameLoop);
-    console.log(this);
   }
 
   componentWillUnmount() {
