@@ -60,8 +60,8 @@ class Bomb {
     }
 
     // Explode left
-    tempX = x;
-    tempY = y + 1;
+    tempX = x - 1;
+    tempY = y;
     distance = 0;
     while (board[tempX][tempY] === OBJECTS.EMPTY) {
       this.spaces.push([tempX, tempY]);
@@ -78,8 +78,8 @@ class Bomb {
     }
 
     // Explode right
-    tempX = x;
-    tempY = y + 1;
+    tempX = x + 1;
+    tempY = y;
     distance = 0;
     while (board[tempX][tempY] === OBJECTS.EMPTY) {
       this.spaces.push([tempX, tempY]);

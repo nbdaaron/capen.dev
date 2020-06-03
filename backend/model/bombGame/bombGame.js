@@ -18,13 +18,12 @@ class BombGame extends Game {
     super(io, lobby);
     this.players = BombGame.initializePlayers(lobby.users);
     this.board = BombGame.generateRandomBoard();
+    this.lobby = lobby;
     this.bombs = [];
     this.interval = setInterval(
       () => io.to(lobby.id).emit(BOMB_GAME_UPDATE_BOARD, this),
       REFRESH_RATE
     );
-    // auto end game
-    setTimeout(() => this.finishGame(lobby.users[0]), 100000);
   }
 
   toJSON() {
@@ -107,6 +106,14 @@ class BombGame extends Game {
 
   plantBomb(user, x, y) {
     this.bombs.push(new Bomb(user, x, y, this));
+  }
+
+  killPlayer(user) {
+    delete this.players[user.id];
+    if (Object.keys(this.players).length === 1) {
+      const winnerId = Object.keys(this.players)[0];
+      this.finishGame(this.lobby.users.find((user) => user.id == winnerId));
+    }
   }
 }
 

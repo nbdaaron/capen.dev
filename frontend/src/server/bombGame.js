@@ -16,6 +16,10 @@ export const plantBomb = position => {
   sendMessage(SEND_OPS.BOMB_GAME_PLANT_BOMB, position);
 };
 
+export const killPlayer = () => {
+  sendMessage(SEND_OPS.BOMB_GAME_KILL_PLAYER);
+};
+
 export const lootPowerup = () => {
   sendMessage(SEND_OPS.BOMB_GAME_LOOT_POWERUP);
 };

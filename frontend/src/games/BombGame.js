@@ -2,6 +2,7 @@ import React from 'react';
 import {
   updatePlayer,
   plantBomb,
+  killPlayer,
   //lootPowerup,
   listenForGameUpdates,
   stopListenForGameUpdates,
@@ -89,7 +90,6 @@ class BombGame extends React.Component {
       Date.now() - this.boardState.lastMessageTimestamp > 1000
     ) {
       Object.keys(this.boardState.players).forEach(playerId => {
-        // eslint-disable-next-line eqeqeq
         if (playerId != this.props.user.id) {
           this.boardState.players[playerId].moving = false;
         }
@@ -107,6 +107,9 @@ class BombGame extends React.Component {
     // 2. Redraw canvas
     this.buildBoard();
 
+    // 3. Check if player touched powerup or bomb.
+    this.checkPlayerCollision();
+
     // Continue game loop
     this.animationFrameId = window.requestAnimationFrame(this.gameLoop);
     this.boardState.lastDrawTimestamp = Date.now();
@@ -123,7 +126,6 @@ class BombGame extends React.Component {
     Object.keys(players).forEach(id => {
       const player = players[id];
       const localPlayer = this.boardState.players[id];
-      // eslint-disable-next-line eqeqeq
       if (id == this.props.user.id) {
         if (!this.validateServerPosition(localPlayer, players[id])) {
           player.position = this.tryMove(player, timeDelta);
@@ -228,29 +230,31 @@ class BombGame extends React.Component {
       newX = usingHelper ? Math.min(Math.floor(playerX / 100 + 1) * 100, newX) : newX;
     }
 
-    // Prevent passing through terrain, bombs, walls, etc.
-    let newBoardX, newBoardY, revertX, revertY;
+    let newBoardX, newBoardY;
     if (actualDirection === KEY.RIGHT) {
       [newBoardX, newBoardY] = [Math.floor((newX + 99) / 100), newY / 100];
-      [revertX, revertY] = [Math.floor(newX / 100) * 100, newY];
     } else if (actualDirection === KEY.LEFT) {
       [newBoardX, newBoardY] = [Math.floor(newX / 100), newY / 100];
-      [revertX, revertY] = [Math.ceil(newX / 100) * 100, newY];
     } else if (actualDirection === KEY.DOWN) {
       [newBoardX, newBoardY] = [newX / 100, Math.floor((newY + 99) / 100)];
-      [revertX, revertY] = [newX, Math.floor(newY / 100) * 100];
     } else if (actualDirection === KEY.UP) {
       [newBoardX, newBoardY] = [newX / 100, Math.floor(newY / 100)];
-      [revertX, revertY] = [newX, Math.ceil(newY / 100) * 100];
     }
 
+    // Prevent passing through terrain, bombs, walls, etc.
     const objectOnBoard = this.boardState.board[newBoardX][newBoardY];
     if (
       objectOnBoard === OBJECTS.WALL ||
       objectOnBoard === OBJECTS.BOMB ||
       objectOnBoard === OBJECTS.BOX
     ) {
-      return [revertX, revertY];
+      // unless you're standing on top of it
+      if (
+        newBoardX !== Math.floor((playerX + 49) / 100) ||
+        newBoardY !== Math.floor((playerY + 49) / 100)
+      ) {
+        return player.position;
+      }
     }
 
     return [newX, newY];
@@ -330,6 +334,27 @@ class BombGame extends React.Component {
     const players = this.boardState.players;
     if (players[playerId] && players[playerId].direction === event.keyCode) {
       players[playerId].moving = false;
+    }
+  }
+
+  checkPlayerCollision() {
+    const playerId = this.props.user.id;
+    const players = this.boardState.players;
+    if (players[playerId]) {
+      const [x, y] = players[playerId].position;
+      const row = Math.floor((x + 49) / 100);
+      const col = Math.floor((y + 49) / 100);
+      const objectOnBoard = this.boardState.board[row][col];
+      if (objectOnBoard === OBJECTS.EXPLOSION_PARTICLE) {
+        // Player Dies
+        killPlayer();
+      } else if (
+        objectOnBoard >= OBJECTS.EXTRA_BOMB_POWERUP &&
+        objectOnBoard <= OBJECTS.EXTRA_SPEED_POWERUP
+      ) {
+        // Pick up powerup!
+        console.log('Picked up powerup!');
+      }
     }
   }
 
