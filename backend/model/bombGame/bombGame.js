@@ -115,6 +115,17 @@ class BombGame extends Game {
       this.finishGame(this.lobby.users.find((user) => user.id == winnerId));
     }
   }
+
+  maybePutPowerup(x, y) {
+    const rand = Math.random();
+    if (rand < 0.1) {
+      this.board[x][y] = OBJECTS.EXTRA_BOMB_POWERUP;
+    } else if (rand < 0.2) {
+      this.board[x][y] = OBJECTS.EXTRA_POWER_POWERUP;
+    } else if (rand < 0.3) {
+      this.board[x][y] = OBJECTS.EXTRA_SPEED_POWERUP;
+    }
+  }
 }
 
 module.exports = BombGame;

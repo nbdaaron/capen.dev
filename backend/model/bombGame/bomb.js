@@ -22,14 +22,14 @@ class Bomb {
     this.exploded = true;
     this.game.players[this.owner.id].bombs += 1;
 
-    this.spaces.push([x, y]);
+    this.spaces.push([x, y, false]);
     board[x][y] = OBJECTS.EXPLOSION_PARTICLE;
     // Explode up
     let tempX = x;
     let tempY = y - 1;
     let distance = 0;
     while (board[tempX][tempY] === OBJECTS.EMPTY) {
-      this.spaces.push([tempX, tempY]);
+      this.spaces.push([tempX, tempY, false]);
       board[tempX][tempY] = OBJECTS.EXPLOSION_PARTICLE;
       tempY -= 1;
       distance++;
@@ -38,7 +38,7 @@ class Bomb {
       }
     }
     if (board[tempX][tempY] === OBJECTS.BOX && distance < this.power) {
-      this.spaces.push([tempX, tempY]);
+      this.spaces.push([tempX, tempY, true]);
       board[tempX][tempY] = OBJECTS.EXPLOSION_PARTICLE;
     }
     // Explode down
@@ -46,7 +46,7 @@ class Bomb {
     tempY = y + 1;
     distance = 0;
     while (board[tempX][tempY] === OBJECTS.EMPTY) {
-      this.spaces.push([tempX, tempY]);
+      this.spaces.push([tempX, tempY, false]);
       board[tempX][tempY] = OBJECTS.EXPLOSION_PARTICLE;
       tempY += 1;
       distance++;
@@ -55,7 +55,7 @@ class Bomb {
       }
     }
     if (board[tempX][tempY] === OBJECTS.BOX && distance < this.power) {
-      this.spaces.push([tempX, tempY]);
+      this.spaces.push([tempX, tempY, true]);
       board[tempX][tempY] = OBJECTS.EXPLOSION_PARTICLE;
     }
 
@@ -64,7 +64,7 @@ class Bomb {
     tempY = y;
     distance = 0;
     while (board[tempX][tempY] === OBJECTS.EMPTY) {
-      this.spaces.push([tempX, tempY]);
+      this.spaces.push([tempX, tempY, false]);
       board[tempX][tempY] = OBJECTS.EXPLOSION_PARTICLE;
       tempX -= 1;
       distance++;
@@ -73,7 +73,7 @@ class Bomb {
       }
     }
     if (board[tempX][tempY] === OBJECTS.BOX && distance < this.power) {
-      this.spaces.push([tempX, tempY]);
+      this.spaces.push([tempX, tempY, true]);
       board[tempX][tempY] = OBJECTS.EXPLOSION_PARTICLE;
     }
 
@@ -82,7 +82,7 @@ class Bomb {
     tempY = y;
     distance = 0;
     while (board[tempX][tempY] === OBJECTS.EMPTY) {
-      this.spaces.push([tempX, tempY]);
+      this.spaces.push([tempX, tempY, false]);
       board[tempX][tempY] = OBJECTS.EXPLOSION_PARTICLE;
       tempX += 1;
       distance++;
@@ -91,16 +91,19 @@ class Bomb {
       }
     }
     if (board[tempX][tempY] === OBJECTS.BOX && distance < this.power) {
-      this.spaces.push([tempX, tempY]);
+      this.spaces.push([tempX, tempY, true]);
       board[tempX][tempY] = OBJECTS.EXPLOSION_PARTICLE;
     }
     setTimeout(() => this.clearBomb(), EXPLOSION_DURATION);
   }
 
   clearBomb() {
-    this.spaces.forEach(([x, y]) => {
+    this.spaces.forEach(([x, y, wasBox]) => {
       if (!this.otherBombsExplodingOn(x, y)) {
         this.game.board[x][y] = OBJECTS.EMPTY;
+        if (wasBox) {
+          this.game.maybePutPowerup(x, y);
+        }
       }
     });
     // Remove from list of bombs

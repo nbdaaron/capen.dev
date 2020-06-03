@@ -6,8 +6,8 @@ class Player {
     this.direction = Player.getStartingDirection(index);
     this.moving = false;
     this.speed = 0.2;
-    this.bombs = 3;
-    this.power = 3;
+    this.bombs = 1;
+    this.power = 1;
     this.lastUpdateTime = Date.now();
   }
 

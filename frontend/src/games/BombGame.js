@@ -293,6 +293,7 @@ class BombGame extends React.Component {
     const { board, players } = this.boardState;
     const canvas = this.canvas.current;
     const context = canvas.getContext('2d');
+    context.font = '20px Arial';
 
     for (var x = 0; x < WIDTH_IN_BLOCKS; x++) {
       for (var y = 0; y < HEIGHT_IN_BLOCKS; y++) {
@@ -310,6 +311,21 @@ class BombGame extends React.Component {
           context.fillStyle = 'blue';
         }
         context.fillRect(100 * x, 100 * y, 100, 100);
+      }
+    }
+
+    for (var x = 0; x < WIDTH_IN_BLOCKS; x++) {
+      for (var y = 0; y < HEIGHT_IN_BLOCKS; y++) {
+        if (board[x][y] === OBJECTS.EXTRA_BOMB_POWERUP) {
+          context.fillStyle = 'black';
+          context.fillText('+1 Bomb', 100 * x, 100 * y + 50);
+        } else if (board[x][y] === OBJECTS.EXTRA_POWER_POWERUP) {
+          context.fillStyle = 'black';
+          context.fillText('+1 Power', 100 * x, 100 * y + 50);
+        } else if (board[x][y] === OBJECTS.EXTRA_SPEED_POWERUP) {
+          context.fillStyle = 'black';
+          context.fillText('+1 Speed', 100 * x, 100 * y + 50);
+        }
       }
     }
 
