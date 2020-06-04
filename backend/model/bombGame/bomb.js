@@ -20,7 +20,11 @@ class Bomb {
     const board = this.game.board;
     const [x, y] = this.position;
     this.exploded = true;
-    this.game.players[this.owner.id].bombs += 1;
+
+    // Player may have been eliminated
+    if (this.game.players[this.owner.id]) {
+      this.game.players[this.owner.id].bombs += 1;
+    }
 
     this.spaces.push([x, y, false]);
     board[x][y] = OBJECTS.EXPLOSION_PARTICLE;

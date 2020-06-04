@@ -6,7 +6,7 @@ const GAME_ID = "bomb";
 const BOMB_GAME_UPDATE_PLAYER = "BOMB_GAME_UPDATE_PLAYER";
 const BOMB_GAME_PLANT_BOMB = "BOMB_GAME_PLANT_BOMB";
 const BOMB_GAME_KILL_PLAYER = "BOMB_GAME_KILL_PLAYER";
-// const BOMB_GAME_LOOT_POWERUP = "BOMB_GAME_LOOT_POWERUP";
+const BOMB_GAME_LOOT_POWERUP = "BOMB_GAME_LOOT_POWERUP";
 
 const BombGameHandler = (socket, io) => {
   socket.on(
@@ -27,6 +27,13 @@ const BombGameHandler = (socket, io) => {
     BOMB_GAME_KILL_PLAYER,
     inGameOnly(socket, GAME_ID, function (game, position) {
       game.killPlayer(socket.user);
+    })
+  );
+
+  socket.on(
+    BOMB_GAME_LOOT_POWERUP,
+    inGameOnly(socket, GAME_ID, function (game, position) {
+      game.lootPowerup(socket.user, position);
     })
   );
 };

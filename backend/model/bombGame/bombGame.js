@@ -126,6 +126,25 @@ class BombGame extends Game {
       this.board[x][y] = OBJECTS.EXTRA_SPEED_POWERUP;
     }
   }
+
+  lootPowerup(user, position) {
+    if (
+      this.players[user.id] &&
+      this.players[user.id].validatePosition(position)
+    ) {
+      const [x, y] = BombGame.getCoordinatesForPosition(position);
+      if (this.board[x][y] === OBJECTS.EXTRA_BOMB_POWERUP) {
+        this.board[x][y] = OBJECTS.EMPTY;
+        this.players[user.id].bombs += 1;
+      } else if (this.board[x][y] === OBJECTS.EXTRA_POWER_POWERUP) {
+        this.board[x][y] = OBJECTS.EMPTY;
+        this.players[user.id].power += 1;
+      } else if (this.board[x][y] === OBJECTS.EXTRA_SPEED_POWERUP) {
+        this.board[x][y] = OBJECTS.EMPTY;
+        this.players[user.id].speed *= 1.2;
+      }
+    }
+  }
 }
 
 module.exports = BombGame;

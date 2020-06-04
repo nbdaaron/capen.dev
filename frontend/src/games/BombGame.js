@@ -3,7 +3,7 @@ import {
   updatePlayer,
   plantBomb,
   killPlayer,
-  //lootPowerup,
+  lootPowerup,
   listenForGameUpdates,
   stopListenForGameUpdates,
 } from '../server/bombGame';
@@ -183,7 +183,7 @@ class BombGame extends React.Component {
     if (!player.moving) {
       return player.position;
     }
-    const helperWindow = 30;
+    const helperWindow = 75;
 
     const [playerX, playerY] = player.position;
     const canMoveUpDown = (playerX + 100) % 200 === 0;
@@ -371,7 +371,7 @@ class BombGame extends React.Component {
         objectOnBoard <= OBJECTS.EXTRA_SPEED_POWERUP
       ) {
         // Pick up powerup!
-        console.log('Picked up powerup!');
+        lootPowerup(players[playerId].position);
       }
     }
   }

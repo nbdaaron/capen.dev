@@ -20,6 +20,6 @@ export const killPlayer = () => {
   sendMessage(SEND_OPS.BOMB_GAME_KILL_PLAYER);
 };
 
-export const lootPowerup = () => {
-  sendMessage(SEND_OPS.BOMB_GAME_LOOT_POWERUP);
+export const lootPowerup = position => {
+  sendMessage(SEND_OPS.BOMB_GAME_LOOT_POWERUP, position);
 };
