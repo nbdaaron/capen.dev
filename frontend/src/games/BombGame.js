@@ -10,6 +10,13 @@ import {
 import { getApproxLatency } from '../server/socket';
 import './BombGame.css';
 
+import powerupIcon from './icons/bombgame-powerup.svg';
+import speedupIcon from './icons/bombgame-speedup.svg';
+import bombupIcon from './icons/bombgame-bombup.svg';
+import bombIcon from './icons/bombgame-bomb.svg';
+import crateIcon from './icons/bombgame-crate.jpeg';
+import smileIcon from './icons/bombgame-smile.png';
+
 // KEEP IN SYNC WITH backend/games/bombGame
 const WIDTH_IN_BLOCKS = 19;
 const HEIGHT_IN_BLOCKS = 19;
@@ -31,6 +38,15 @@ const KEY = {
   UP: 38,
   RIGHT: 39,
   DOWN: 40,
+};
+
+const drawRotatedImage = (ctx, image, x, y, w, h, degrees) => {
+  ctx.save();
+  ctx.translate(x + w / 2, y + h / 2);
+  ctx.rotate((degrees * Math.PI) / 180.0);
+  ctx.translate(-x - w / 2, -y - h / 2);
+  ctx.drawImage(image, x, y, w, h);
+  ctx.restore();
 };
 
 // Update server with my state every 200ms.
@@ -264,9 +280,28 @@ class BombGame extends React.Component {
 
   componentDidMount() {
     this.listeners = listenForGameUpdates(this.gameUpdateHandler);
-    this.buildBoard();
+
     document.addEventListener('keydown', this.handleKeyDown);
     document.addEventListener('keyup', this.handleKeyUp);
+
+    this.powerupIcon = new Image();
+    this.powerupIcon.src = powerupIcon;
+
+    this.speedupIcon = new Image();
+    this.speedupIcon.src = speedupIcon;
+
+    this.bombupIcon = new Image();
+    this.bombupIcon.src = bombupIcon;
+
+    this.bombIcon = new Image();
+    this.bombIcon.src = bombIcon;
+
+    this.crateIcon = new Image();
+    this.crateIcon.src = crateIcon;
+
+    this.smileIcon = new Image();
+    this.smileIcon.src = smileIcon;
+
     this.animationFrameId = window.requestAnimationFrame(this.gameLoop);
   }
 
@@ -300,9 +335,9 @@ class BombGame extends React.Component {
         if (board[x][y] === OBJECTS.EMPTY) {
           context.fillStyle = 'green';
         } else if (board[x][y] === OBJECTS.WALL) {
-          context.fillStyle = 'grey';
-        } else if (board[x][y] === OBJECTS.BOMB) {
           context.fillStyle = 'black';
+        } else if (board[x][y] === OBJECTS.BOMB) {
+          context.fillStyle = 'green';
         } else if (board[x][y] === OBJECTS.BOX) {
           context.fillStyle = 'brown';
         } else if (board[x][y] === OBJECTS.EXPLOSION_PARTICLE) {
@@ -313,18 +348,27 @@ class BombGame extends React.Component {
         context.fillRect(100 * x, 100 * y, 100, 100);
       }
     }
-
     for (x = 0; x < WIDTH_IN_BLOCKS; x++) {
       for (y = 0; y < HEIGHT_IN_BLOCKS; y++) {
-        if (board[x][y] === OBJECTS.EXTRA_BOMB_POWERUP) {
-          context.fillStyle = 'black';
-          context.fillText('+1 Bomb', 100 * x, 100 * y + 50);
-        } else if (board[x][y] === OBJECTS.EXTRA_POWER_POWERUP) {
-          context.fillStyle = 'black';
-          context.fillText('+1 Power', 100 * x, 100 * y + 50);
-        } else if (board[x][y] === OBJECTS.EXTRA_SPEED_POWERUP) {
-          context.fillStyle = 'black';
-          context.fillText('+1 Speed', 100 * x, 100 * y + 50);
+        if (board[x][y] === OBJECTS.EXTRA_BOMB_POWERUP && this.bombupIcon.complete) {
+          context.drawImage(this.bombupIcon, 100 * x, 100 * y, 100, 100);
+        } else if (
+          board[x][y] === OBJECTS.EXTRA_POWER_POWERUP &&
+          this.powerupIcon.complete
+        ) {
+          context.drawImage(this.powerupIcon, 100 * x, 100 * y, 100, 100);
+        } else if (
+          board[x][y] === OBJECTS.EXTRA_SPEED_POWERUP &&
+          this.speedupIcon.complete
+        ) {
+          context.drawImage(this.speedupIcon, 100 * x, 100 * y, 100, 100);
+        } else if (board[x][y] === OBJECTS.BOMB && this.bombIcon.complete) {
+          context.drawImage(this.bombIcon, 100 * x, 100 * y, 100, 100);
+        } else if (board[x][y] === OBJECTS.BOX && this.crateIcon.complete) {
+          context.drawImage(this.crateIcon, 100 * x, 100 * y, 100, 100);
+        } else if (board[x][y] === OBJECTS.WALL) {
+          context.fillStyle = 'grey';
+          context.fillRect(100 * x + 5, 100 * y + 5, 90, 90);
         }
       }
     }
@@ -332,7 +376,20 @@ class BombGame extends React.Component {
     context.fillStyle = 'orange';
     Object.values(players).forEach(player => {
       const [playerX, playerY] = player.position;
-      context.fillRect(playerX, playerY, 100, 100);
+      context.beginPath();
+      context.arc(playerX + 50, playerY + 50, 50, 0, 2 * Math.PI);
+      context.fill();
+      let rotation = 90;
+      if (player.direction === KEY.UP) {
+        rotation = 270;
+      } else if (player.direction === KEY.RIGHT) {
+        rotation = 0;
+      } else if (player.direction === KEY.DOWN) {
+        rotation = 90;
+      } else if (player.direction === KEY.LEFT) {
+        rotation = 180;
+      }
+      drawRotatedImage(context, this.smileIcon, playerX, playerY, 100, 100, rotation);
     });
   }
 

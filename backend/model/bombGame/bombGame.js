@@ -118,11 +118,11 @@ class BombGame extends Game {
 
   maybePutPowerup(x, y) {
     const rand = Math.random();
-    if (rand < 0.1) {
+    if (rand < 0.2) {
       this.board[x][y] = OBJECTS.EXTRA_BOMB_POWERUP;
-    } else if (rand < 0.2) {
+    } else if (rand < 0.4) {
       this.board[x][y] = OBJECTS.EXTRA_POWER_POWERUP;
-    } else if (rand < 0.3) {
+    } else if (rand < 0.6) {
       this.board[x][y] = OBJECTS.EXTRA_SPEED_POWERUP;
     }
   }
@@ -141,7 +141,7 @@ class BombGame extends Game {
         this.players[user.id].power += 1;
       } else if (this.board[x][y] === OBJECTS.EXTRA_SPEED_POWERUP) {
         this.board[x][y] = OBJECTS.EMPTY;
-        this.players[user.id].speed *= 1.2;
+        this.players[user.id].speed *= 1.3;
       }
     }
   }
