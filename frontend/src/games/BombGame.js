@@ -49,8 +49,8 @@ const drawRotatedImage = (ctx, image, x, y, w, h, degrees) => {
   ctx.restore();
 };
 
-// Update server with my state every 200ms.
-const REFRESH_RATE = 300;
+// Update server with my state every 25ms.
+const REFRESH_RATE = 25;
 
 const isArrowKey = event => event.keyCode >= KEY.LEFT && event.keyCode <= KEY.DOWN;
 const isSpaceKey = event => event.keyCode === KEY.SPACE;

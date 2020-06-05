@@ -46,8 +46,8 @@ const ALWAYS_EMPTY_SPACES = [
 // Chance of a blank space becoming a box
 const BOX_CHANCE = 0.5;
 
-// Update clients with my state every 300ms.
-const REFRESH_RATE = 300;
+// Update clients with my state every 25ms.
+const REFRESH_RATE = 25;
 
 // Bombs explode after 3 seconds.
 const BOMB_DURATION = 3000;

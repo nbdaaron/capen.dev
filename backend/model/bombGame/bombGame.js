@@ -141,7 +141,7 @@ class BombGame extends Game {
         this.players[user.id].power += 1;
       } else if (this.board[x][y] === OBJECTS.EXTRA_SPEED_POWERUP) {
         this.board[x][y] = OBJECTS.EMPTY;
-        this.players[user.id].speed *= 1.3;
+        this.players[user.id].speed += 0.15;
       }
     }
   }

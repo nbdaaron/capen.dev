@@ -13,13 +13,17 @@ class Bomb {
     game.players[owner.id].bombs -= 1;
     game.board[x][y] = OBJECTS.BOMB;
 
-    setTimeout(() => this.explodeBomb(), BOMB_DURATION);
+    this.timeout = setTimeout(() => this.explodeBomb(), BOMB_DURATION);
   }
 
   explodeBomb() {
+    if (this.exploded) {
+      return;
+    }
+    this.exploded = true;
+    clearTimeout(this.timeout);
     const board = this.game.board;
     const [x, y] = this.position;
-    this.exploded = true;
 
     // Player may have been eliminated
     if (this.game.players[this.owner.id]) {
@@ -32,8 +36,19 @@ class Bomb {
     let tempX = x;
     let tempY = y - 1;
     let distance = 0;
-    while (board[tempX][tempY] === OBJECTS.EMPTY) {
+    while (
+      board[tempX][tempY] !== OBJECTS.WALL &&
+      board[tempX][tempY] !== OBJECTS.BOX
+    ) {
       this.spaces.push([tempX, tempY, false]);
+      if (board[tempX][tempY] === OBJECTS.BOMB) {
+        this.game.bombs
+          .find((bomb) => {
+            const [bombX, bombY] = bomb.position;
+            return bombX === tempX && bombY === tempY;
+          })
+          .explodeBomb();
+      }
       board[tempX][tempY] = OBJECTS.EXPLOSION_PARTICLE;
       tempY -= 1;
       distance++;
@@ -49,8 +64,19 @@ class Bomb {
     tempX = x;
     tempY = y + 1;
     distance = 0;
-    while (board[tempX][tempY] === OBJECTS.EMPTY) {
+    while (
+      board[tempX][tempY] !== OBJECTS.WALL &&
+      board[tempX][tempY] !== OBJECTS.BOX
+    ) {
       this.spaces.push([tempX, tempY, false]);
+      if (board[tempX][tempY] === OBJECTS.BOMB) {
+        this.game.bombs
+          .find((bomb) => {
+            const [bombX, bombY] = bomb.position;
+            return bombX === tempX && bombY === tempY;
+          })
+          .explodeBomb();
+      }
       board[tempX][tempY] = OBJECTS.EXPLOSION_PARTICLE;
       tempY += 1;
       distance++;
@@ -67,8 +93,19 @@ class Bomb {
     tempX = x - 1;
     tempY = y;
     distance = 0;
-    while (board[tempX][tempY] === OBJECTS.EMPTY) {
+    while (
+      board[tempX][tempY] !== OBJECTS.WALL &&
+      board[tempX][tempY] !== OBJECTS.BOX
+    ) {
       this.spaces.push([tempX, tempY, false]);
+      if (board[tempX][tempY] === OBJECTS.BOMB) {
+        this.game.bombs
+          .find((bomb) => {
+            const [bombX, bombY] = bomb.position;
+            return bombX === tempX && bombY === tempY;
+          })
+          .explodeBomb();
+      }
       board[tempX][tempY] = OBJECTS.EXPLOSION_PARTICLE;
       tempX -= 1;
       distance++;
@@ -85,8 +122,19 @@ class Bomb {
     tempX = x + 1;
     tempY = y;
     distance = 0;
-    while (board[tempX][tempY] === OBJECTS.EMPTY) {
+    while (
+      board[tempX][tempY] !== OBJECTS.WALL &&
+      board[tempX][tempY] !== OBJECTS.BOX
+    ) {
       this.spaces.push([tempX, tempY, false]);
+      if (board[tempX][tempY] === OBJECTS.BOMB) {
+        this.game.bombs
+          .find((bomb) => {
+            const [bombX, bombY] = bomb.position;
+            return bombX === tempX && bombY === tempY;
+          })
+          .explodeBomb();
+      }
       board[tempX][tempY] = OBJECTS.EXPLOSION_PARTICLE;
       tempX += 1;
       distance++;
