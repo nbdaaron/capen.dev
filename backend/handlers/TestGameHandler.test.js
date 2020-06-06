@@ -3,6 +3,14 @@ const { MockSocket, MockIO } = require("../mock/MockSocketIO");
 const Guest = require("../model/guest");
 const Lobby = require("../model/lobby");
 
+jest.mock("../database", () => ({
+  query: (query, data, cb) => {
+    if (cb) {
+      cb(null, [null, [{ id: 123 }]]);
+    }
+  },
+}));
+
 test("Should declare the winner", async () => {
   const socket = new MockSocket();
   socket.user = new Guest();

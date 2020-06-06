@@ -15,7 +15,7 @@ const BOMB_GAME_UPDATE_BOARD = "BOMB_GAME_UPDATE_BOARD";
 
 class BombGame extends Game {
   constructor(io, lobby) {
-    super(io, lobby);
+    super(io, lobby, "bomb");
     this.players = BombGame.initializePlayers(lobby.users);
     this.board = BombGame.generateRandomBoard();
     this.lobby = lobby;

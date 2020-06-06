@@ -3,6 +3,10 @@ const Guest = require("./guest");
 
 const dummyUser = new Guest();
 
+jest.mock("../database", () => ({
+  query: jest.fn(),
+}));
+
 test("Lobby leader should be first user to join", () => {
   const lobby = new Lobby(Lobby.generateRandomId(), dummyUser);
   expect(lobby.getLeader()).toEqual(dummyUser);

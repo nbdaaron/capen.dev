@@ -3,6 +3,10 @@ const { MockSocket, MockIO } = require("../mock/MockSocketIO");
 const User = require("../model/user");
 const { Anything } = require("../testingUtil");
 
+jest.mock("../database", () => ({
+  query: jest.fn(),
+}));
+
 test("Should generate empty lobby IDs on request", () => {
   const socket = new MockSocket(true);
   LobbyHandler(socket, MockIO);
