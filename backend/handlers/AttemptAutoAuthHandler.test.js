@@ -1,6 +1,6 @@
 const AttemptAutoAuthHandler = require("./AttemptAutoAuthHandler");
 const { MockSocket } = require("../mock/MockSocketIO");
-const User = require("../model/user");
+const User = require("../model/User");
 const jwt = require("jsonwebtoken");
 
 jest.mock("../config", () => ({

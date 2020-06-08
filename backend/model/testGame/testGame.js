@@ -1,4 +1,4 @@
-const Game = require("../game");
+const Game = require("../Game");
 
 class TestGame extends Game {
   constructor(io, lobby) {

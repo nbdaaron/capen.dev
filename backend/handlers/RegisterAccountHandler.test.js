@@ -7,8 +7,8 @@ jest.mock("../config", () => ({
   jwtSecret: "abc123",
 }));
 
-jest.mock("../database", () => ({
-  query: jest.fn(),
+jest.mock("../database/User", () => ({
+  registerUser: jest.fn(),
 }));
 
 jest.mock("bcrypt", () => ({
@@ -16,7 +16,7 @@ jest.mock("bcrypt", () => ({
 }));
 
 const bcrypt = require("bcrypt");
-const database = require("../database");
+const { registerUser } = require("../database/User");
 
 test("Should fail if username too short", async () => {
   const socket = new MockSocket();
@@ -48,9 +48,7 @@ test("Should fail if password too short", async () => {
 
 test("Should fail if username is taken", async () => {
   bcrypt.hash.mockResolvedValue(123);
-  database.query.mockImplementation((query, data, cb) => {
-    cb({ code: "ER_DUP_ENTRY" });
-  });
+  registerUser.mockRejectedValue(new Error("Username is taken!"));
 
   const socket = new MockSocket();
   RegisterAccountHandler(socket);
@@ -67,9 +65,7 @@ test("Should fail if username is taken", async () => {
 
 test("Should emit success response on success", async () => {
   bcrypt.hash.mockResolvedValue(123);
-  database.query.mockImplementation((query, data, cb) => {
-    cb();
-  });
+  registerUser.mockResolvedValue();
 
   const socket = new MockSocket();
   RegisterAccountHandler(socket);

@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 const config = require("../config");
-const User = require("../model/user");
+const User = require("../model/User");
 
 // RECV_OPS
 const ATTEMPT_AUTO_AUTH = "ATTEMPT_AUTO_AUTH";

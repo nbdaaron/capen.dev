@@ -1,4 +1,4 @@
-const User = require("../model/user");
+const User = require("../model/User");
 const { remove } = require("lodash");
 
 const rooms = {};
@@ -44,7 +44,11 @@ class MockSocket {
   }
 
   emit(sendOp, message) {
-    this.sentMessages.push([sendOp, JSON.parse(JSON.stringify(message))]);
+    if (message === undefined) {
+      this.sentMessages.push([sendOp, undefined]);
+    } else {
+      this.sentMessages.push([sendOp, JSON.parse(JSON.stringify(message))]);
+    }
   }
 
   getEmittedMessages() {

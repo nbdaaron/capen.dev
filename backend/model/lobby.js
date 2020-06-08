@@ -1,7 +1,7 @@
 // Lobbies will be (for the most part) 13-digit numbers.
 const MAX_LOBBY_ID = 1e14;
-const BombGame = require("./bombGame/bombGame");
-const TestGame = require("./testGame/testGame");
+const BombGame = require("./bombGame/BombGame");
+const TestGame = require("./testGame/TestGame");
 
 class Lobby {
   constructor(id, creator) {

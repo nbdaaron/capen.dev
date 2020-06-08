@@ -1,14 +1,10 @@
 const TestGameHandler = require("./TestGameHandler");
 const { MockSocket, MockIO } = require("../mock/MockSocketIO");
-const Guest = require("../model/guest");
-const Lobby = require("../model/lobby");
+const Guest = require("../model/Guest");
+const Lobby = require("../model/Lobby");
 
-jest.mock("../database", () => ({
-  query: (query, data, cb) => {
-    if (cb) {
-      cb(null, [null, [{ id: 123 }]]);
-    }
-  },
+jest.mock("../database/Game", () => ({
+  recordResults: jest.fn(),
 }));
 
 test("Should declare the winner", async () => {

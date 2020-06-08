@@ -1,5 +1,5 @@
-const Message = require("./message");
-const Guest = require("./guest");
+const Message = require("./Message");
+const Guest = require("./Guest");
 
 const bob = new Guest();
 

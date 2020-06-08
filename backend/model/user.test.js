@@ -1,4 +1,4 @@
-const User = require("./user");
+const User = require("./User");
 
 test("users with the same id/name should be equal", () => {
   const aaron1 = new User(123, "aaron");

@@ -1,6 +1,6 @@
-const { SuccessResponse } = require("../model/response");
-const Message = require("../model/message");
-const Lobby = require("../model/lobby");
+const { SuccessResponse } = require("../model/Response");
+const Message = require("../model/Message");
+const Lobby = require("../model/Lobby");
 const { authenticatedOnly, inLobbyOnly } = require("./util");
 
 // RECV_OPS

@@ -1,6 +1,5 @@
-const { SuccessResponse, ErrorResponse } = require("../model/response");
-const database = require("../database");
-const bcrypt = require("bcrypt");
+const { SuccessResponse, ErrorResponse } = require("../model/Response");
+const { registerUser } = require("../database/User");
 
 // RECV_OPS
 const REGISTER_ACCOUNT = "REGISTER_ACCOUNT";
@@ -14,9 +13,6 @@ const USERNAME_TOO_SHORT_ERROR = new ErrorResponse(
 const PASSWORD_TOO_SHORT_ERROR = new ErrorResponse(
   "Register Account Error: Password must be atleast 5 characters!"
 );
-const USERNAME_TAKEN_ERROR = new ErrorResponse(
-  "Register Account Error: This username is already taken."
-);
 
 const RegisterAccountHandler = (socket) => {
   socket.on(REGISTER_ACCOUNT, function (info) {
@@ -28,28 +24,11 @@ const RegisterAccountHandler = (socket) => {
       socket.emit(REGISTER_RESPONSE, PASSWORD_TOO_SHORT_ERROR);
       return;
     }
-    // Hash the password
-    bcrypt.hash(info.password, 10).then((hash) => {
-      info.password = hash;
-      database.query(
-        "INSERT INTO Users SET ?",
-        info,
-        (error, results, fields) => {
-          if (error) {
-            if (error.code === "ER_DUP_ENTRY") {
-              socket.emit(REGISTER_RESPONSE, USERNAME_TAKEN_ERROR);
-            } else {
-              socket.emit(
-                REGISTER_RESPONSE,
-                new ErrorResponse(error.sqlMessage)
-              );
-            }
-          } else {
-            socket.emit(REGISTER_RESPONSE, new SuccessResponse());
-          }
-        }
+    registerUser(info.username, info.password, info.email)
+      .then(() => socket.emit(REGISTER_RESPONSE, new SuccessResponse()))
+      .catch((err) =>
+        socket.emit(REGISTER_RESPONSE, new ErrorResponse(err.message))
       );
-    });
   });
 };
 

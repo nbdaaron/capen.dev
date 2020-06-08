@@ -1,4 +1,4 @@
-const { SuccessResponse } = require("../model/response");
+const { SuccessResponse } = require("../model/Response");
 
 const GET_USER_INFO = "GET_USER_INFO";
 const USER_INFO_RESPONSE = "USER_INFO_RESPONSE";

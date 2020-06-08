@@ -1,6 +1,6 @@
 const LoginHandler = require("./LoginHandler");
 const { MockSocket } = require("../mock/MockSocketIO");
-const User = require("../model/user");
+const User = require("../model/User");
 const waitForExpect = require("wait-for-expect");
 const { Anything } = require("../testingUtil");
 
@@ -8,8 +8,8 @@ jest.mock("../config", () => ({
   jwtSecret: "abc123",
 }));
 
-jest.mock("../database", () => ({
-  query: jest.fn(),
+jest.mock("../database/User", () => ({
+  login: jest.fn(),
 }));
 
 jest.mock("bcrypt", () => ({
@@ -21,7 +21,7 @@ jest.mock("jsonwebtoken", () => ({
 }));
 
 const bcrypt = require("bcrypt");
-const database = require("../database");
+const { login } = require("../database/User");
 const jwt = require("jsonwebtoken");
 
 test("Should return user for valid login credentials", async () => {
@@ -29,9 +29,7 @@ test("Should return user for valid login credentials", async () => {
   jwt.sign.mockImplementation((user, secret, cb) => {
     cb(null, "authToken");
   });
-  database.query.mockImplementation((query, data, cb) => {
-    cb(null, [{ id: 3, username: "aaron", password: "somehash" }]);
-  });
+  login.mockResolvedValue(new User(3, "aaron"));
 
   const socket = new MockSocket();
   LoginHandler(socket);
@@ -53,9 +51,7 @@ test("Should return user for valid login credentials", async () => {
 
 test("Should fail for invalid login credentials", async () => {
   bcrypt.compare.mockResolvedValue(false);
-  database.query.mockImplementation((query, data, cb) => {
-    cb(null, [{ id: 3, username: "aaron", password: "somehash" }]);
-  });
+  login.mockRejectedValue(new Error("These credentials are incorrect!"));
 
   const socket = new MockSocket();
   LoginHandler(socket);
@@ -66,7 +62,7 @@ test("Should fail for invalid login credentials", async () => {
   });
   const response = {
     success: false,
-    error: "Login Error: These credentials are incorrect!",
+    error: "These credentials are incorrect!",
   };
   await waitForExpect(() =>
     expect(socket.getEmittedMessages()).toMatchPackets([

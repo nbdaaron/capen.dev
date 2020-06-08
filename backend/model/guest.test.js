@@ -1,5 +1,5 @@
-const Guest = require("./guest");
-const User = require("./user");
+const Guest = require("./Guest");
+const User = require("./User");
 
 test("creates a User object", () => {
   const guest = new Guest();

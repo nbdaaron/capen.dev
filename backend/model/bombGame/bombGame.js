@@ -6,9 +6,9 @@ const {
   BOX_CHANCE,
   REFRESH_RATE,
 } = require("./constants");
-const Player = require("./player");
-const Game = require("../game");
-const Bomb = require("./bomb");
+const Player = require("./Player");
+const Game = require("../Game");
+const Bomb = require("./Bomb");
 
 // SEND_OPS
 const BOMB_GAME_UPDATE_BOARD = "BOMB_GAME_UPDATE_BOARD";

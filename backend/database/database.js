@@ -1,4 +1,4 @@
-const config = require("./config");
+const config = require("../config");
 
 var mysql = require("mysql");
 var connection;

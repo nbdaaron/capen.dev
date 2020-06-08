@@ -1,4 +1,4 @@
-const User = require("./user");
+const User = require("./User");
 const MAX_GUEST_ID = 1e6;
 
 class Guest extends User {

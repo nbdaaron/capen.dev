@@ -1,4 +1,4 @@
-const { SuccessResponse, ErrorResponse } = require("./response");
+const { SuccessResponse, ErrorResponse } = require("./Response");
 
 test("Success Response should be successful", () => {
   expect(new SuccessResponse().success).toEqual(true);

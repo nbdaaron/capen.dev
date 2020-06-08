@@ -1,10 +1,10 @@
-const Lobby = require("./lobby");
-const Guest = require("./guest");
+const Lobby = require("./Lobby");
+const Guest = require("./Guest");
 
 const dummyUser = new Guest();
 
-jest.mock("../database", () => ({
-  query: jest.fn(),
+jest.mock("../database/Game", () => ({
+  recordResults: jest.fn(),
 }));
 
 test("Lobby leader should be first user to join", () => {
