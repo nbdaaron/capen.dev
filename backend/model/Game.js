@@ -4,10 +4,9 @@ const LOBBY_STATE_CHANGE = "LOBBY_STATE_CHANGE";
 const { recordResults } = require("../database/Game");
 
 class Game {
-  constructor(io, lobby, gameId) {
+  constructor(io, lobby) {
     this.io = io;
     this.lobby = lobby;
-    this.gameId = gameId;
   }
 
   toJSON() {
@@ -18,11 +17,11 @@ class Game {
 
   finishGame(winner) {
     delete this.lobby.game;
-    this.io.to(this.lobby.id).emit(DECLARE_WINNER, winner);
+    if (winner) {
+      this.io.to(this.lobby.id).emit(DECLARE_WINNER, winner);
+      recordResults(this.lobby.gameId, this.lobby.users, winner);
+    }
     this.io.to(this.lobby.id).emit(LOBBY_STATE_CHANGE, this.lobby);
-
-    // Record game results
-    recordResults(this.gameId, this.lobby.users, winner);
   }
 }
 

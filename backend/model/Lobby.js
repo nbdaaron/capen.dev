@@ -2,6 +2,7 @@
 const MAX_LOBBY_ID = 1e14;
 const BombGame = require("./bombGame/BombGame");
 const TestGame = require("./testGame/TestGame");
+const DrawingGame = require("./drawingGame/DrawingGame");
 
 class Lobby {
   constructor(id, creator) {
@@ -34,6 +35,8 @@ class Lobby {
       this.game = new TestGame(io, this);
     } else if (this.gameId === "bomb") {
       this.game = new BombGame(io, this);
+    } else if (this.gameId === "draw") {
+      this.game = new DrawingGame(io, this);
     } else {
       throw new Error(`Game ID ${this.gameId} doesn't exist.`);
     }

@@ -8,6 +8,7 @@ const LogoutHandler = require("./handlers/LogoutHandler");
 
 const TestGameHandler = require("./handlers/TestGameHandler");
 const BombGameHandler = require("./handlers/BombGameHandler");
+const DrawingGameHandler = require("./handlers/DrawingGameHandler");
 
 const handlers = [
   PingHandler,
@@ -19,6 +20,7 @@ const handlers = [
   LogoutHandler,
   TestGameHandler,
   BombGameHandler,
+  DrawingGameHandler,
 ];
 
 module.exports = handlers;

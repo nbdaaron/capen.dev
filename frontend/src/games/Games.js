@@ -1,5 +1,6 @@
 import TestGame from './TestGame';
 import BombGame from './BombGame';
+import DrawingGame from './DrawingGame';
 
 const GAMES = {
   test: {
@@ -9,6 +10,10 @@ const GAMES = {
   bomb: {
     title: 'Bomb Game',
     component: BombGame,
+  },
+  draw: {
+    title: 'Drawing Game',
+    component: DrawingGame,
   },
 };
 
