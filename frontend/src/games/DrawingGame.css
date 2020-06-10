@@ -2,3 +2,24 @@
   max-height: 80vh;
   max-width: 80vw;
 }
+
+.drawingGameGuesses {
+  border-top: 1px solid #1c2030;
+  border-left: 1px solid #1c2030;
+  border-right: 1px solid #1c2030;
+  height: calc(100vh - 200px);
+  text-align: left;
+  overflow-y: scroll;
+}
+
+.drawingGameInputBox {
+  width: calc(15vw - 60px);
+}
+
+.drawingGameGuess {
+  margin: 5px 5px;
+}
+
+.drawingGameGuesser {
+  font-weight: bold;
+}
