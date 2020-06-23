@@ -1,4 +1,5 @@
 const database = require("./database");
+const Guest = require("../model/Guest");
 
 const recordResults = (gameId, users, winner) => {
   database.query(
@@ -10,10 +11,12 @@ const recordResults = (gameId, users, winner) => {
       }
       const id = results[1][0].id;
       users.forEach((user) => {
-        database.query("INSERT INTO Players SET ?", {
-          gameId: id,
-          userId: user.id,
-        });
+        if (!(user instanceof Guest)) {
+          database.query("INSERT INTO Players SET ?", {
+            gameId: id,
+            userId: user.id,
+          });
+        }
       });
     }
   );
