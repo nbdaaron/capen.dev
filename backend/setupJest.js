@@ -13,44 +13,50 @@ const anythingCatcher = (a, b) => {
   }
 };
 
+const generateFailureMessage = (reason, packetsA, packetsB) => {
+  return {
+    pass: false,
+    message: () =>
+      `${reason}! ${printPackets(packetsA)} !== ${printPackets(packetsB)}`,
+  };
+};
+
+const generateSuccessMessage = () => {
+  return {
+    pass: true,
+    message: () => `Packet sets are both the same`,
+  };
+};
+
 expect.extend({
   toMatchPackets(received, packets) {
     if (received.length !== packets.length) {
-      return {
-        pass: false,
-        message: () =>
-          `Packet Sets are of unequal length! ${printPackets(
-            received
-          )} !== ${printPackets(packets)}`,
-      };
+      return generateFailureMessage(
+        "Packet sets are of unequal length",
+        received,
+        packets
+      );
     }
     for (var i = 0; i < received.length; i++) {
       const [receivedOpcode, receivedMessage] = received[i];
       const [packetOpcode, packetMessage] = packets[i];
 
       if (!isEqualWith(receivedOpcode, packetOpcode, anythingCatcher)) {
-        return {
-          pass: false,
-          message: () =>
-            `Packet ${i} had different opcodes! ${printPackets(
-              received
-            )} !== ${printPackets(packets)}`,
-        };
+        return generateFailureMessage(
+          `Packet ${i} had different opcodes`,
+          received,
+          packets
+        );
       } else if (
         !isEqualWith(receivedMessage, packetMessage, anythingCatcher)
       ) {
-        return {
-          pass: false,
-          message: () =>
-            `Packet ${i} had different messages! ${printPackets(
-              received
-            )} !== ${printPackets(packets)}`,
-        };
+        return generateFailureMessage(
+          `Packet ${i} had different messages`,
+          received,
+          packets
+        );
       }
     }
-    return {
-      pass: true,
-      message: () => `Packet sets are both the same`,
-    };
+    return generateSuccessMessage();
   },
 });
