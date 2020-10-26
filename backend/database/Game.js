@@ -2,7 +2,7 @@ const database = require("./database");
 const Guest = require("../model/Guest");
 
 const recordResults = (gameId, users, winner) => {
-  database.query(
+  database().query(
     "INSERT INTO Games SET ?; SELECT LAST_INSERT_ID() as id;",
     { gameId: gameId, winner: winner.id },
     (err, results, fields) => {
@@ -12,7 +12,7 @@ const recordResults = (gameId, users, winner) => {
       const id = results[1][0].id;
       users.forEach((user) => {
         if (!(user instanceof Guest)) {
-          database.query("INSERT INTO Players SET ?", {
+          database().query("INSERT INTO Players SET ?", {
             gameId: id,
             userId: user.id,
           });

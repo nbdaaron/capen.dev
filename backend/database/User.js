@@ -11,7 +11,7 @@ const registerUser = (username, password, email) => {
         password: hash,
         email,
       };
-      database.query(
+      database().query(
         "INSERT INTO Users SET ?",
         info,
         (error, results, fields) => {
@@ -32,7 +32,7 @@ const registerUser = (username, password, email) => {
 
 const login = (username, password) => {
   return new Promise((resolve, reject) => {
-    database.query(
+    database().query(
       "SELECT `id`, `password` FROM `Users` WHERE `username` = ?",
       [username],
       (error, results, fields) => {
